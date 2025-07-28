@@ -1,4 +1,4 @@
-// netlify/functions/chat.js
+// netlify/functions/chat.js 
 import fetch from "node-fetch";
 
 export async function handler(event) {
