@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unspoken Healer</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="hero">
+    <h1>Unspoken Healer</h1>
+    <p class="tagline">We have a solution for everything 🌿</p>
+    <button class="cta" onclick="document.getElementById('chatBox').scrollIntoView({behavior: 'smooth'});">
+      Start Free Chat
+    </button>
+  </header>
+
+  <section id="plans">
+    <h2>Choose Your Plan</h2>
+    <div class="plan-cards">
+      <div class="plan">
+        <h3>🎯 Beginner Pack</h3>
+        <p class="price">₹110 / 7 days</p>
+        <p>Perfect to explore and get started</p>
+      </div>
+      <div class="plan highlight">
+        <h3>🌙 Monthly Pack</h3>
+        <p class="price">₹430 / month</p>
+        <p>Best value for ongoing support</p>
+      </div>
+    </div>
+    <button class="cta" onclick="openPaymentOptions()">💳 Subscribe Now</button>
+  </section>
+
+  <main>
+    <div id="chatBox">
+      <h2>Start Your Conversation</h2>
+      <div id="chatLog"></div>
+      <input type="text" id="userInput" placeholder="Type your message..." />
+      <button onclick="sendMessage()">Send</button>
+    </div>
+  </main>
+
+  <section id="consultation">
+    <h2>Book a Consultation</h2>
+    <p>Want personal guidance? Fill out the form below and we’ll reach out to you.</p>
+    
+    <form action="https://formsubmit.co/infoabhishekbhandari@gmail.com" method="POST" class="consult-form">
+      <input type="hidden" name="_captcha" value="false">
+      <input type="hidden" name="_template" value="table">
+      <input type="hidden" name="_subject" value="New Consultation Request - Unspoken Healer">
+      <input type="hidden" name="_next" value="https://your-username.github.io/unspoken-healer/thankyou.html">
+      <input type="text" name="_honey" style="display:none">
+
+      <input type="text" name="Name" placeholder="Your Full Name" required>
+      <input type="email" name="Email" placeholder="Your Email Address" required>
+      <textarea name="Message" placeholder="Briefly describe your concern..." rows="4" required></textarea>
+
+      <button type="submit" class="cta">📅 Request Appointment</button>
+    </form>
+  </section>
+
+  <div class="popup" id="termsPopup">
+    <div class="popup-content">
+      <h2>Terms & Services</h2>
+      <p>
+        Welcome to <strong>Unspoken Healer</strong>, a safe space designed to support your emotional well‑being. 
+        Please review our 
+        <a href="https://abhishek252-sudo.github.io/unspoken-healer/" target="_blank">full Terms of Service</a>.
+      </p>
+      <p>
+        • This platform offers emotional support and guidance.<br>
+        • Not a replacement for medical treatment.<br>
+        • In emergencies, call local emergency services.<br>
+        • Conversations are private, avoid sharing financial details.<br>
+        • Consultation requests connect you with our team.
+      </p>
+      <input type="checkbox" id="agree"> I agree to the Terms & Services
+      <br><br>
+      <button onclick="startChat()">Continue</button>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2025 Unspoken Healer | 
+      <a href="https://abhishek252-sudo.github.io/unspoken-healer/" target="_blank">Terms of Service</a>
+    </p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
+let userId = localStorage.getItem("userId");
+if (!userId) {
+  userId = "guest_" + Math.floor(Math.random() * 1000000);
+  localStorage.setItem("userId", userId);
+}
+let freeCount = 0;
+
+function sendMessage() {
+  const inputField = document.getElementById('userInput');
+  const input = inputField.value;
+  if (!input.trim()) return;
+
+  const log = document.getElementById('chatLog');
+  const userMsg = document.createElement('div');
+  userMsg.className = "chat-msg";
+  userMsg.innerHTML = "<strong>You:</strong> " + input;
+  log.appendChild(userMsg);
+
+  const aiMsg = document.createElement('div');
+  aiMsg.className = "chat-msg";
+  log.appendChild(aiMsg);
+
+  freeCount++;
+  if (freeCount <= 5) {
+    aiMsg.innerHTML = "<strong>AI:</strong> This is a demo reply. In the full version, I will provide real-time answers.";
+  } else {
+    aiMsg.innerHTML = `
+      <p>⚠️ You’ve reached your free limit.</p>
+      <p><strong>Choose your subscription:</strong></p>
+      <ul>
+        <li>🎯 Beginner Pack: ₹110 for 7 days</li>
+        <li>🌙 Monthly Pack: ₹430</li>
+      </ul>
+      <button onclick="payWithPayPal()">💳 Pay with PayPal</button>
+      <button onclick="payWithPaytm()">📲 Pay with Paytm / UPI</button>
+    `;
+  }
+
+  inputField.value = "";
+  log.scrollTop = log.scrollHeight;
+}
+
+function payWithPayPal() {
+  window.open("https://paypal.me/AbhishekBhandari734/2", "_blank");
+}
+
+function payWithPaytm() {
+  alert("📲 Pay via UPI:\nUPI ID: paytmąrlj18py8rlj@paytm\n\nPlans:\n• ₹110 for 7 days\n• ₹430 for 1 month\n\nAfter payment, email proof to infoabhishekbhandari@gmail.com");
+}
+
+function openPaymentOptions() {
+  alert("Choose a plan:\n\n🎯 Beginner Pack: ₹110 / 7 days\n🌙 Monthly Pack: ₹430 / month\n\nPayment Options:\n\nPayPal: https://paypal.me/AbhishekBhandari734/2\n\nUPI (Paytm): paytmąrlj18py8rlj@paytm\n\nAfter payment, please email proof to infoabhishekbhandari@gmail.com");
+}
+
+function startChat() {
+  if (document.getElementById('agree').checked) {
+    document.getElementById('termsPopup').style.display = 'none';
+  } else {
+    alert("Please agree to the Terms & Services first.");
+  }
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thank You - Unspoken Healer</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="hero">
+    <h1>Thank You 🌿</h1>
+    <p>Your consultation request has been sent successfully.</p>
+    <p>We’ll contact you at your provided email shortly.</p>
+    <a href="index.html" class="cta">⬅ Back to Home</a>
+  </div>
+</body>
+</html>
