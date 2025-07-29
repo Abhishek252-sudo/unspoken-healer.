@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Unspoken Healer - We Have Solution of Everything</title>
+  <link rel="stylesheet" href="styles.css">
 
   <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js"></script>
@@ -29,6 +30,7 @@
       background: rgba(0,0,0,0.65);
       z-index: -1;
     }
+
     header {
       text-align: center;
       padding: 30px 20px;
@@ -43,7 +45,9 @@
     }
     header h3 { font-weight: 300; color: #ddd; }
     .auth-buttons {
-      position: absolute; top: 20px; right: 30px;
+      position: absolute;
+      top: 20px;
+      right: 30px;
     }
     .auth-buttons button {
       margin-left: 10px;
@@ -56,14 +60,9 @@
       font-weight: bold;
     }
 
-    #chatSection {
-      display: flex;
-      justify-content: center;
-      margin: 40px auto;
-    }
+    #chatSection { display: flex; justify-content: center; margin: 40px auto; }
     #chatContainer {
-      width: 95%;
-      max-width: 650px;
+      width: 95%; max-width: 650px;
       background: rgba(255,255,255,0.08);
       backdrop-filter: blur(15px);
       border-radius: 15px;
@@ -71,22 +70,18 @@
       padding: 20px;
     }
     #chat {
-      height: 350px;
-      overflow-y: auto;
+      height: 350px; overflow-y: auto;
       border: 1px solid rgba(255,255,255,0.3);
-      padding: 10px;
-      margin-bottom: 10px;
+      padding: 10px; margin-bottom: 10px;
       border-radius: 10px;
       background: rgba(0,0,0,0.6);
       color: white;
     }
     #controls { display: flex; }
     #controls input {
-      flex: 1;
-      padding: 12px;
+      flex: 1; padding: 12px;
       border-radius: 10px;
-      border: none;
-      margin-right: 8px;
+      border: none; margin-right: 8px;
       background: rgba(255,255,255,0.2);
       color: #fff;
     }
@@ -104,25 +99,19 @@
     #status { margin-top: 5px; font-size: 0.9em; color: #ccc; }
 
     .popup {
-      position: fixed; top: 0; left: 0;
-      width: 100%; height: 100%;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
       background: rgba(0,0,0,0.9);
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       z-index: 1000;
     }
     .popup-content {
-      background: #222;
-      color: white;
-      padding: 20px;
-      border-radius: 10px;
-      max-width: 400px;
-      text-align: center;
+      background: #222; color: white;
+      padding: 20px; border-radius: 10px;
+      max-width: 400px; text-align: center;
       box-shadow: 0 4px 20px rgba(0,0,0,0.9);
     }
     .hidden { display: none; }
-
     section { padding: 40px 20px; max-width: 1000px; margin: auto; }
     .features, .pricing {
       display: grid;
@@ -138,41 +127,6 @@
       box-shadow: 0 4px 20px rgba(0,0,0,0.7);
     }
     .card h3 { color: #00f2fe; }
-    .card button {
-      padding: 10px 20px;
-      border: none;
-      border-radius: 8px;
-      background: #00f2fe;
-      color: black;
-      font-weight: bold;
-      cursor: pointer;
-      margin-top: 10px;
-      transition: transform 0.3s;
-    }
-    .card button:hover {
-      transform: scale(1.05);
-      background: #00d4ff;
-    }
-
-    /* Login/Register Modal */
-    #authModal {
-      position: fixed; top:0; left:0;
-      width:100%; height:100%;
-      background: rgba(0,0,0,0.8);
-      display: none;
-      justify-content:center; align-items:center;
-      z-index:2000;
-    }
-    #authModal .modal-content {
-      background:#111; color:white;
-      padding:20px; border-radius:12px;
-      width:300px; text-align:center;
-    }
-    #authModal input {
-      width:100%; padding:10px;
-      margin:10px 0; border:none;
-      border-radius:6px;
-    }
   </style>
 </head>
 <body>
@@ -195,45 +149,29 @@
       <input type="text" id="userInput" placeholder="Ask me anything..." disabled>
       <button id="sendBtn" disabled>Send</button>
     </div>
-    <p id="status">Please login & agree to terms before chatting.</p>
+    <p id="status">Free messages left: <span id="msgCount">5</span></p>
   </div>
 </section>
 
-<section>
-  <h2>Our Features</h2>
-  <div class="features">
-    <div class="card"><h3>💬 1-on-1 Chat</h3><p>Private AI chat for any emotional or personal problem.</p></div>
-    <div class="card"><h3>📞 Appointment</h3><p>Book a safe, one-on-one consultation via email.</p></div>
-    <div class="card"><h3>🧠 Emotional Support</h3><p>Guidance for stress, studies, and relationships.</p></div>
-    <div class="card"><h3>⚡ Instant Help</h3><p>Get immediate responses when you need them most.</p></div>
+<!-- Plans Popup -->
+<div id="planPopup" class="popup hidden">
+  <div class="popup-content">
+    <h2>Upgrade for Unlimited Support 🌌</h2>
+    <p>Your free 5 chats are over. Unlock more benefits:</p>
+    <ul style="text-align:left;">
+      <li>💬 Unlimited 1-on-1 Chat</li>
+      <li>📞 Option for Voice Consultation</li>
+      <li>🧠 Full Emotional & Study Support</li>
+    </ul>
+    <h3>Choose a Plan:</h3>
+    <p>Weekly Plan: ₹110</p>
+    <p>Monthly Plan: ₹470 (₹10 off)</p>
+    <a href="https://paypal.me/AbhishekBhandari734" target="_blank"><button>Pay with PayPal</button></a>
+    <a href="upi://pay?pa=paytmąrlj18py8rlj@paytm&pn=UnspokenHealer&am=470" target="_blank"><button>Pay with Paytm</button></a>
+    <br><br>
+    <button id="loginNowBtn">Login / Register</button>
   </div>
-</section>
-
-<section>
-  <h2>Plans & Pricing</h2>
-  <div class="pricing">
-    <div class="card">
-      <h3>Weekly Plan</h3>
-      <p>₹110 for 7 days</p>
-      <a href="https://paypal.me/AbhishekBhandari734" target="_blank"><button>Pay with PayPal</button></a>
-      <a href="upi://pay?pa=paytmąrlj18py8rlj@paytm&pn=UnspokenHealer&am=110" target="_blank"><button>Pay with Paytm</button></a>
-    </div>
-    <div class="card">
-      <h3>Monthly Plan</h3>
-      <p>₹470 (₹10 off)</p>
-      <a href="https://paypal.me/AbhishekBhandari734" target="_blank"><button>Pay with PayPal</button></a>
-      <a href="upi://pay?pa=paytmąrlj18py8rlj@paytm&pn=UnspokenHealer&am=470" target="_blank"><button>Pay with Paytm</button></a>
-    </div>
-  </div>
-</section>
-
-<section>
-  <h2>Book a Consultation</h2>
-  <p>Want a human touch? Tap below to request a call.</p>
-  <a href="mailto:infoabhishekbhandari@gmail.com?subject=Consultation Request">
-    <button>Request Appointment</button>
-  </a>
-</section>
+</div>
 
 <!-- Terms Popup -->
 <div id="termsPopup" class="popup">
@@ -244,17 +182,6 @@
     </p>
     <label><input type="checkbox" id="agreeTerms"> I agree</label><br><br>
     <button id="continueBtn">Continue</button>
-  </div>
-</div>
-
-<!-- Login/Register Modal -->
-<div id="authModal">
-  <div class="modal-content">
-    <h2 id="authTitle">Login</h2>
-    <input type="email" id="emailInput" placeholder="Email">
-    <input type="password" id="passwordInput" placeholder="Password">
-    <button id="authSubmitBtn">Submit</button>
-    <p id="authMsg"></p>
   </div>
 </div>
 
