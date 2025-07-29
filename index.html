@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Unspoken Healer - We Have Solution of Everything</title>
-  <link rel="stylesheet" href="styles.css">
 
   <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js"></script>
@@ -19,10 +18,7 @@
       background: url('https://images.unsplash.com/photo-1501594907352-04cda38ebc29?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80')
         no-repeat center center fixed;
       background-size: cover;
-      position: relative;
-      overflow-x: hidden;
     }
-
     body::before {
       content: "";
       position: fixed;
@@ -31,7 +27,6 @@
       background: rgba(0,0,0,0.65);
       z-index: -1;
     }
-
     header {
       text-align: center;
       padding: 30px 20px;
@@ -44,10 +39,7 @@
       color: #00f2fe;
       text-shadow: 0px 0px 20px rgba(0,242,254,0.7);
     }
-    header h3 {
-      font-weight: 300;
-      color: #ddd;
-    }
+    header h3 { font-weight: 300; color: #ddd; }
     .auth-buttons {
       position: absolute;
       top: 20px;
@@ -63,16 +55,9 @@
       cursor: pointer;
       font-weight: bold;
     }
-
-    /* Chat container */
-    #chatSection {
-      display: flex;
-      justify-content: center;
-      margin: 40px auto;
-    }
+    #chatSection { display: flex; justify-content: center; margin: 40px auto; }
     #chatContainer {
-      width: 95%;
-      max-width: 650px;
+      width: 95%; max-width: 650px;
       background: rgba(255,255,255,0.08);
       backdrop-filter: blur(15px);
       border-radius: 15px;
@@ -89,9 +74,7 @@
       background: rgba(0,0,0,0.6);
       color: white;
     }
-    #controls {
-      display: flex;
-    }
+    #controls { display: flex; }
     #controls input {
       flex: 1;
       padding: 12px;
@@ -111,24 +94,13 @@
       cursor: pointer;
       transition: transform 0.3s;
     }
-    #controls button:hover {
-      transform: scale(1.05);
-    }
-    #status {
-      margin-top: 5px;
-      font-size: 0.9em;
-      color: #ccc;
-    }
-
-    /* Popup */
+    #controls button:hover { transform: scale(1.05); }
+    #status { margin-top: 5px; font-size: 0.9em; color: #ccc; }
     .popup {
-      position: fixed;
-      top: 0; left: 0;
+      position: fixed; top: 0; left: 0;
       width: 100%; height: 100%;
       background: rgba(0,0,0,0.9);
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       z-index: 1000;
     }
     .popup-content {
@@ -141,12 +113,9 @@
       box-shadow: 0 4px 20px rgba(0,0,0,0.9);
     }
     .hidden { display: none; }
-
-    /* Sections */
     section { padding: 40px 20px; max-width: 1000px; margin: auto; }
     .features, .pricing {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 20px;
     }
     .card {
@@ -169,10 +138,7 @@
       margin-top: 10px;
       transition: transform 0.3s;
     }
-    .card button:hover {
-      transform: scale(1.05);
-      background: #00d4ff;
-    }
+    .card button:hover { transform: scale(1.05); background: #00d4ff; }
   </style>
 </head>
 <body>
@@ -247,6 +213,63 @@
   </div>
 </div>
 
-<script src="script.js" type="module"></script>
+<script>
+  // Firebase config
+  const firebaseConfig = {
+    apiKey: "AIzaSyDpSDZydyYmVv_cB_xErTL_KiKx0l11dEM",
+    authDomain: "unspokenhealer-f626a.firebaseapp.com",
+    projectId: "unspokenhealer-f626a",
+    storageBucket: "unspokenhealer-f626a.firebasestorage.app",
+    messagingSenderId: "1009119300737",
+    appId: "1:1009119300737:web:1ae60b6caf0c7389fc5180",
+    measurementId: "G-T44HTFGYSE"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+
+  // Auth Buttons
+  const loginBtn = document.getElementById('loginBtn');
+  const logoutBtn = document.getElementById('logoutBtn');
+  const statusText = document.getElementById('status');
+  const userInput = document.getElementById('userInput');
+  const sendBtn = document.getElementById('sendBtn');
+
+  loginBtn.addEventListener('click', () => {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    auth.signInWithPopup(provider)
+      .then(() => alert('✅ Logged in'))
+      .catch(err => alert(err.message));
+  });
+
+  logoutBtn.addEventListener('click', () => {
+    auth.signOut().then(() => alert('👋 Logged out'));
+  });
+
+  auth.onAuthStateChanged(user => {
+    if (user) {
+      loginBtn.style.display = 'none';
+      logoutBtn.classList.remove('hidden');
+      statusText.textContent = 'Logged in as ' + user.displayName;
+      userInput.disabled = false;
+      sendBtn.disabled = false;
+    } else {
+      loginBtn.style.display = 'inline-block';
+      logoutBtn.classList.add('hidden');
+      statusText.textContent = 'Please login & agree to terms before chatting.';
+      userInput.disabled = true;
+      sendBtn.disabled = true;
+    }
+  });
+
+  // Terms Popup
+  const popup = document.getElementById('termsPopup');
+  document.getElementById('continueBtn').addEventListener('click', () => {
+    if (document.getElementById('agreeTerms').checked) {
+      popup.classList.add('hidden');
+    } else {
+      alert('You must agree to continue.');
+    }
+  });
+</script>
 </body>
 </html>
