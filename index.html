@@ -4,6 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Unspoken Healer - We Have Solution of Everything</title>
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.0.0/firebase-analytics.js"></script>
+
   <style>
     body {
       margin: 0;
@@ -30,6 +37,7 @@
       padding: 30px 20px;
       background: rgba(0,0,0,0.6);
       box-shadow: 0 4px 20px rgba(0,0,0,0.8);
+      position: relative;
     }
     header h1 {
       font-size: 2.5em;
@@ -39,6 +47,21 @@
     header h3 {
       font-weight: 300;
       color: #ddd;
+    }
+    .auth-buttons {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+    }
+    .auth-buttons button {
+      margin-left: 10px;
+      background: #00f2fe;
+      color: #000;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
     }
 
     /* Chat container */
@@ -91,41 +114,10 @@
     #controls button:hover {
       transform: scale(1.05);
     }
-
-    /* Features & Pricing */
-    section {
-      padding: 40px 20px;
-      max-width: 1000px;
-      margin: auto;
-    }
-    .features, .pricing {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-    }
-    .card {
-      background: rgba(255,255,255,0.1);
-      backdrop-filter: blur(10px);
-      border-radius: 12px;
-      padding: 20px;
-      text-align: center;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.7);
-    }
-    .card h3 { color: #00f2fe; }
-    button {
-      padding: 10px 20px;
-      border: none;
-      border-radius: 8px;
-      background: #00f2fe;
-      color: black;
-      font-weight: bold;
-      cursor: pointer;
-      margin-top: 10px;
-      transition: transform 0.3s;
-    }
-    button:hover {
-      transform: scale(1.05);
-      background: #00d4ff;
+    #status {
+      margin-top: 5px;
+      font-size: 0.9em;
+      color: #ccc;
     }
 
     /* Popup */
@@ -149,6 +141,38 @@
       box-shadow: 0 4px 20px rgba(0,0,0,0.9);
     }
     .hidden { display: none; }
+
+    /* Sections */
+    section { padding: 40px 20px; max-width: 1000px; margin: auto; }
+    .features, .pricing {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+    .card {
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.7);
+    }
+    .card h3 { color: #00f2fe; }
+    .card button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      background: #00f2fe;
+      color: black;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: transform 0.3s;
+    }
+    .card button:hover {
+      transform: scale(1.05);
+      background: #00d4ff;
+    }
   </style>
 </head>
 <body>
@@ -156,6 +180,11 @@
 <header>
   <h1>Unspoken Healer 🌌</h1>
   <h3>We have solution of everything</h3>
+  <div class="auth-buttons">
+    <button id="loginBtn">Login</button>
+    <button id="registerBtn">Register</button>
+    <button id="logoutBtn" class="hidden">Logout</button>
+  </div>
 </header>
 
 <section id="chatSection">
@@ -163,31 +192,20 @@
     <h2>Your Private Chat</h2>
     <div id="chat"></div>
     <div id="controls">
-      <input type="text" id="userInput" placeholder="Ask me anything...">
-      <button id="sendBtn">Send</button>
+      <input type="text" id="userInput" placeholder="Ask me anything..." disabled>
+      <button id="sendBtn" disabled>Send</button>
     </div>
+    <p id="status">Please login & agree to terms before chatting.</p>
   </div>
 </section>
 
 <section>
   <h2>Our Features</h2>
   <div class="features">
-    <div class="card">
-      <h3>💬 1-on-1 Chat</h3>
-      <p>Private AI chat for any emotional or personal problem.</p>
-    </div>
-    <div class="card">
-      <h3>📞 Appointment</h3>
-      <p>Book a safe, one-on-one consultation via email.</p>
-    </div>
-    <div class="card">
-      <h3>🧠 Emotional Support</h3>
-      <p>Guidance for stress, studies, and relationships.</p>
-    </div>
-    <div class="card">
-      <h3>⚡ Instant Help</h3>
-      <p>Get immediate responses when you need them most.</p>
-    </div>
+    <div class="card"><h3>💬 1-on-1 Chat</h3><p>Private AI chat for any emotional or personal problem.</p></div>
+    <div class="card"><h3>📞 Appointment</h3><p>Book a safe, one-on-one consultation via email.</p></div>
+    <div class="card"><h3>🧠 Emotional Support</h3><p>Guidance for stress, studies, and relationships.</p></div>
+    <div class="card"><h3>⚡ Instant Help</h3><p>Get immediate responses when you need them most.</p></div>
   </div>
 </section>
 
@@ -229,6 +247,6 @@
   </div>
 </div>
 
-<script src="script.js"></script>
+<script src="script.js" type="module"></script>
 </body>
 </html>
