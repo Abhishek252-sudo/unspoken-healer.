@@ -2,7 +2,6 @@
 document.getElementById("continueBtn").addEventListener("click", () => {
   if (document.getElementById("agreeTerms").checked) {
     document.getElementById("termsPopup").classList.add("hidden");
-    document.getElementById("paymentSection").classList.remove("hidden");
   } else {
     alert("You must agree to the terms first!");
   }
@@ -10,8 +9,8 @@ document.getElementById("continueBtn").addEventListener("click", () => {
 
 // Unlock Chat after Payment
 document.getElementById("unlockChat").addEventListener("click", () => {
-  document.getElementById("paymentSection").classList.add("hidden");
   document.getElementById("chatContainer").style.display = "block";
+  window.scrollTo({ top: document.getElementById("chatContainer").offsetTop, behavior: "smooth" });
 });
 
 // Chat Logic
