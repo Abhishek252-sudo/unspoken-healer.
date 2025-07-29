@@ -1,68 +1,48 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const termsPopup = document.getElementById("terms-popup");
-  const agreeCheckbox = document.getElementById("agree-checkbox");
-  const agreeBtn = document.getElementById("agree-btn");
-  const chatBox = document.getElementById("chat-box");
-  const chatContent = document.getElementById("chat-content");
-  const userInput = document.getElementById("user-input");
-  const sendBtn = document.getElementById("send-btn");
+// Handle Terms Popup
+document.getElementById("continueBtn").addEventListener("click", () => {
+  if (document.getElementById("agreeTerms").checked) {
+    document.getElementById("termsPopup").classList.add("hidden");
+    document.getElementById("paymentSection").classList.remove("hidden");
+  } else {
+    alert("You must agree to the terms first!");
+  }
+});
 
-  let freeMessages = 5;
+// Unlock Chat after Payment
+document.getElementById("unlockChat").addEventListener("click", () => {
+  document.getElementById("paymentSection").classList.add("hidden");
+  document.getElementById("chatContainer").style.display = "block";
+});
 
-  // Show popup on load
-  termsPopup.style.display = "block";
+// Chat Logic
+document.getElementById("sendBtn").addEventListener("click", async () => {
+  const input = document.getElementById("userInput");
+  const chat = document.getElementById("chat");
 
-  // Handle agreement
-  agreeBtn.addEventListener("click", () => {
-    if (agreeCheckbox.checked) {
-      termsPopup.style.display = "none";
-      chatBox.style.display = "block";
-    } else {
-      alert("⚠️ Please agree to the Terms before continuing.");
-    }
-  });
+  if (!input.value.trim()) return;
 
-  // Send message
-  async function sendMessage(message) {
-    if (!message.trim()) return;
+  const userMsg = document.createElement("div");
+  userMsg.textContent = "🧑 You: " + input.value;
+  chat.appendChild(userMsg);
 
-    let userMsg = document.createElement("p");
-    userMsg.textContent = "🧑 You: " + message;
-    chatContent.appendChild(userMsg);
+  const aiMsg = document.createElement("div");
+  aiMsg.textContent = "🤖 AI is typing...";
+  chat.appendChild(aiMsg);
+  chat.scrollTop = chat.scrollHeight;
 
-    try {
-      const response = await fetch("/.netlify/functions/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message })
-      });
+  try {
+    const response = await fetch("/.netlify/functions/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: input.value })
+    });
 
-      const data = await response.json();
-      let aiMsg = document.createElement("p");
-      aiMsg.textContent =
-        "🤖 AI: " +
-        (data.choices?.[0]?.message?.content || "Sorry, I couldn’t reply.");
-      chatContent.appendChild(aiMsg);
-      chatContent.scrollTop = chatContent.scrollHeight;
-
-      freeMessages--;
-      if (freeMessages === 0) setTimeout(showPaymentPopup, 500);
-
-    } catch (error) {
-      let errorMsg = document.createElement("p");
-      errorMsg.textContent = "⚠️ Error: Unable to connect to AI.";
-      chatContent.appendChild(errorMsg);
-    }
-
-    userInput.value = "";
+    const data = await response.json();
+    aiMsg.textContent = "🤖 AI: " + (data.reply || data.error || "Sorry, I couldn’t reply.");
+  } catch (err) {
+    aiMsg.textContent = "⚠️ Error: " + err.message;
   }
 
-  sendBtn.addEventListener("click", () => sendMessage(userInput.value));
-  userInput.addEventListener("keypress", (e) => {
-    if (e.key === "Enter") sendMessage(userInput.value);
-  });
-
-  function showPaymentPopup() {
-    alert("⚠️ Free trial ended.\n\n👉 7 Days: ₹110\n👉 Monthly: ₹460\n\nPayPal: https://paypal.me/AbhishekBhandari734\nPaytm: paytmąrlj18py8rlj@paytm\n\nSend receipt to infoabhishekbhandari@gmail.com");
-  }
+  input.value = "";
+  chat.scrollTop = chat.scrollHeight;
 });
