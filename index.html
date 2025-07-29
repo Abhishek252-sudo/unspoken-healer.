@@ -6,9 +6,8 @@
   <title>Unspoken Healer - We Have Solution of Everything</title>
 
   <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/12.0.0/firebase-analytics.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
 
   <style>
     body {
@@ -18,6 +17,8 @@
       background: url('https://images.unsplash.com/photo-1501594907352-04cda38ebc29?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80')
         no-repeat center center fixed;
       background-size: cover;
+      position: relative;
+      overflow-x: hidden;
     }
     body::before {
       content: "";
@@ -39,7 +40,10 @@
       color: #00f2fe;
       text-shadow: 0px 0px 20px rgba(0,242,254,0.7);
     }
-    header h3 { font-weight: 300; color: #ddd; }
+    header h3 {
+      font-weight: 300;
+      color: #ddd;
+    }
     .auth-buttons {
       position: absolute;
       top: 20px;
@@ -55,9 +59,14 @@
       cursor: pointer;
       font-weight: bold;
     }
-    #chatSection { display: flex; justify-content: center; margin: 40px auto; }
+    #chatSection {
+      display: flex;
+      justify-content: center;
+      margin: 40px auto;
+    }
     #chatContainer {
-      width: 95%; max-width: 650px;
+      width: 95%;
+      max-width: 650px;
       background: rgba(255,255,255,0.08);
       backdrop-filter: blur(15px);
       border-radius: 15px;
@@ -74,7 +83,9 @@
       background: rgba(0,0,0,0.6);
       color: white;
     }
-    #controls { display: flex; }
+    #controls {
+      display: flex;
+    }
     #controls input {
       flex: 1;
       padding: 12px;
@@ -94,13 +105,22 @@
       cursor: pointer;
       transition: transform 0.3s;
     }
-    #controls button:hover { transform: scale(1.05); }
-    #status { margin-top: 5px; font-size: 0.9em; color: #ccc; }
+    #controls button:hover {
+      transform: scale(1.05);
+    }
+    #status {
+      margin-top: 5px;
+      font-size: 0.9em;
+      color: #ccc;
+    }
     .popup {
-      position: fixed; top: 0; left: 0;
+      position: fixed;
+      top: 0; left: 0;
       width: 100%; height: 100%;
       background: rgba(0,0,0,0.9);
-      display: flex; align-items: center; justify-content: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       z-index: 1000;
     }
     .popup-content {
@@ -113,32 +133,6 @@
       box-shadow: 0 4px 20px rgba(0,0,0,0.9);
     }
     .hidden { display: none; }
-    section { padding: 40px 20px; max-width: 1000px; margin: auto; }
-    .features, .pricing {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-    }
-    .card {
-      background: rgba(255,255,255,0.1);
-      backdrop-filter: blur(10px);
-      border-radius: 12px;
-      padding: 20px;
-      text-align: center;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.7);
-    }
-    .card h3 { color: #00f2fe; }
-    .card button {
-      padding: 10px 20px;
-      border: none;
-      border-radius: 8px;
-      background: #00f2fe;
-      color: black;
-      font-weight: bold;
-      cursor: pointer;
-      margin-top: 10px;
-      transition: transform 0.3s;
-    }
-    .card button:hover { transform: scale(1.05); background: #00d4ff; }
   </style>
 </head>
 <body>
@@ -148,7 +142,6 @@
   <h3>We have solution of everything</h3>
   <div class="auth-buttons">
     <button id="loginBtn">Login</button>
-    <button id="registerBtn">Register</button>
     <button id="logoutBtn" class="hidden">Logout</button>
   </div>
 </header>
@@ -163,42 +156,6 @@
     </div>
     <p id="status">Please login & agree to terms before chatting.</p>
   </div>
-</section>
-
-<section>
-  <h2>Our Features</h2>
-  <div class="features">
-    <div class="card"><h3>💬 1-on-1 Chat</h3><p>Private AI chat for any emotional or personal problem.</p></div>
-    <div class="card"><h3>📞 Appointment</h3><p>Book a safe, one-on-one consultation via email.</p></div>
-    <div class="card"><h3>🧠 Emotional Support</h3><p>Guidance for stress, studies, and relationships.</p></div>
-    <div class="card"><h3>⚡ Instant Help</h3><p>Get immediate responses when you need them most.</p></div>
-  </div>
-</section>
-
-<section>
-  <h2>Plans & Pricing</h2>
-  <div class="pricing">
-    <div class="card">
-      <h3>Weekly Plan</h3>
-      <p>₹110 for 7 days</p>
-      <a href="https://paypal.me/AbhishekBhandari734" target="_blank"><button>Pay with PayPal</button></a>
-      <a href="upi://pay?pa=paytmąrlj18py8rlj@paytm&pn=UnspokenHealer&am=110" target="_blank"><button>Pay with Paytm</button></a>
-    </div>
-    <div class="card">
-      <h3>Monthly Plan</h3>
-      <p>₹470 (₹10 off)</p>
-      <a href="https://paypal.me/AbhishekBhandari734" target="_blank"><button>Pay with PayPal</button></a>
-      <a href="upi://pay?pa=paytmąrlj18py8rlj@paytm&pn=UnspokenHealer&am=470" target="_blank"><button>Pay with Paytm</button></a>
-    </div>
-  </div>
-</section>
-
-<section>
-  <h2>Book a Consultation</h2>
-  <p>Want a human touch? Tap below to request a call.</p>
-  <a href="mailto:infoabhishekbhandari@gmail.com?subject=Consultation Request">
-    <button>Request Appointment</button>
-  </a>
 </section>
 
 <!-- Terms Popup -->
@@ -227,12 +184,13 @@
   firebase.initializeApp(firebaseConfig);
   const auth = firebase.auth();
 
-  // Auth Buttons
   const loginBtn = document.getElementById('loginBtn');
   const logoutBtn = document.getElementById('logoutBtn');
   const statusText = document.getElementById('status');
   const userInput = document.getElementById('userInput');
   const sendBtn = document.getElementById('sendBtn');
+  const popup = document.getElementById('termsPopup');
+  let termsAgreed = false;
 
   loginBtn.addEventListener('click', () => {
     const provider = new firebase.auth.GoogleAuthProvider();
@@ -246,30 +204,41 @@
   });
 
   auth.onAuthStateChanged(user => {
-    if (user) {
-      loginBtn.style.display = 'none';
-      logoutBtn.classList.remove('hidden');
-      statusText.textContent = 'Logged in as ' + user.displayName;
-      userInput.disabled = false;
-      sendBtn.disabled = false;
+    if (user && termsAgreed) {
+      enableChat(user.displayName);
     } else {
-      loginBtn.style.display = 'inline-block';
-      logoutBtn.classList.add('hidden');
-      statusText.textContent = 'Please login & agree to terms before chatting.';
-      userInput.disabled = true;
-      sendBtn.disabled = true;
+      disableChat();
     }
   });
 
-  // Terms Popup
-  const popup = document.getElementById('termsPopup');
+  function enableChat(name) {
+    loginBtn.style.display = 'none';
+    logoutBtn.classList.remove('hidden');
+    statusText.textContent = 'Logged in as ' + name;
+    userInput.disabled = false;
+    sendBtn.disabled = false;
+  }
+
+  function disableChat() {
+    loginBtn.style.display = 'inline-block';
+    logoutBtn.classList.add('hidden');
+    statusText.textContent = 'Please login & agree to terms before chatting.';
+    userInput.disabled = true;
+    sendBtn.disabled = true;
+  }
+
   document.getElementById('continueBtn').addEventListener('click', () => {
     if (document.getElementById('agreeTerms').checked) {
-      popup.classList.add('hidden');
+      termsAgreed = true;
+      popup.style.display = 'none';
+      if (auth.currentUser) {
+        enableChat(auth.currentUser.displayName);
+      }
     } else {
-      alert('You must agree to continue.');
+      alert('⚠️ You must agree to continue.');
     }
   });
 </script>
+
 </body>
 </html>
