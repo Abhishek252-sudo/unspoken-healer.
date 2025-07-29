@@ -7,137 +7,199 @@
   <style>
     body {
       margin: 0;
-      font-family: "Segoe UI", Arial, sans-serif;
-      color: #f5f5f5;
-      background: url('https://images.unsplash.com/photo-1501594907352-04cda38ebc29?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80') 
-        no-repeat center center fixed;
-      background-size: cover;
+      font-family: Arial, sans-serif;
+      color: #333;
       position: relative;
       overflow-x: hidden;
     }
 
-    /* Dark overlay */
+    /* Animated gradient background */
     body::before {
       content: "";
       position: fixed;
       top: 0; left: 0;
       width: 100%; height: 100%;
-      background: rgba(0,0,0,0.6);
+      background: linear-gradient(-45deg, #4facfe, #00f2fe, #43e97b, #38f9d7);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+      z-index: -2;
+    }
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Floating bubbles */
+    .bubble {
+      position: fixed;
+      bottom: -100px;
+      background: rgba(255, 255, 255, 0.4);
+      border-radius: 50%;
+      animation: rise 20s infinite ease-in;
       z-index: -1;
+    }
+    @keyframes rise {
+      0% { transform: translateY(0) scale(1); opacity: 0.7; }
+      100% { transform: translateY(-120vh) scale(0.5); opacity: 0; }
     }
 
     header {
+      background: rgba(0,0,0,0.5);
+      color: white;
       text-align: center;
       padding: 40px 20px;
-      background: rgba(0,0,0,0.6);
-      box-shadow: 0 4px 20px rgba(0,0,0,0.8);
+      border-radius: 0 0 30px 30px;
     }
-    header h1 {
-      font-size: 2.5em;
-      color: #00f2fe;
-      text-shadow: 0px 0px 15px rgba(0,242,254,0.7);
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    section {
+      padding: 40px 20px;
+      max-width: 1000px;
+      margin: auto;
     }
-    header h1::before {
-      content: "🌌";
-      margin-right: 10px;
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
     }
-    header h3 {
-      font-weight: 300;
-      color: #ddd;
+    .feature {
+      background: rgba(255,255,255,0.9);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      text-align: center;
     }
-
-    /* Chat container */
-    #chatSection {
+    .pricing {
       display: flex;
       justify-content: center;
-      margin-top: 30px;
+      gap: 20px;
+    }
+    .plan {
+      background: rgba(255,255,255,0.9);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      flex: 1;
+      text-align: center;
+    }
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      background: #4facfe;
+      color: white;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: transform 0.3s;
+    }
+    button:hover {
+      transform: scale(1.05);
+      background: #00c6ff;
     }
     #chatContainer {
-      width: 90%;
-      max-width: 600px;
-      background: rgba(255,255,255,0.08);
-      backdrop-filter: blur(12px);
-      border-radius: 15px;
-      box-shadow: 0 6px 25px rgba(0,0,0,0.8);
+      display: none;
+      margin-top: 30px;
+      background: rgba(255,255,255,0.95);
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
       padding: 20px;
     }
     #chat {
-      height: 350px;
+      height: 300px;
       overflow-y: auto;
-      border: 1px solid rgba(255,255,255,0.3);
+      border: 1px solid #ddd;
       padding: 10px;
       margin-bottom: 10px;
-      border-radius: 10px;
-      background: rgba(0,0,0,0.6);
-      color: white;
+      border-radius: 8px;
+      background: #fafafa;
     }
-    #controls {
-      display: flex;
-    }
-    #controls input {
-      flex: 1;
-      padding: 12px;
-      border-radius: 10px;
-      border: none;
-      margin-right: 8px;
-      background: rgba(255,255,255,0.2);
-      color: #fff;
-    }
-    #controls button {
-      padding: 12px 20px;
-      border: none;
-      border-radius: 10px;
-      background: #00f2fe;
-      color: #000;
-      font-weight: bold;
-      cursor: pointer;
-      transition: transform 0.3s;
-    }
-    #controls button:hover {
-      transform: scale(1.05);
-    }
-
-    /* Popup */
     .popup {
       position: fixed;
       top: 0; left: 0;
       width: 100%; height: 100%;
-      background: rgba(0,0,0,0.9);
+      background: rgba(0,0,0,0.7);
       display: flex;
       align-items: center;
       justify-content: center;
-      z-index: 1000;
     }
     .popup-content {
-      background: #222;
-      color: white;
+      background: white;
       padding: 20px;
       border-radius: 10px;
       max-width: 400px;
       text-align: center;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.9);
     }
     .hidden { display: none; }
   </style>
 </head>
 <body>
 
+<!-- Floating Bubbles -->
+<div class="bubble" style="width:40px; height:40px; left:10%; animation-duration:18s;"></div>
+<div class="bubble" style="width:60px; height:60px; left:30%; animation-duration:22s;"></div>
+<div class="bubble" style="width:25px; height:25px; left:50%; animation-duration:15s;"></div>
+<div class="bubble" style="width:80px; height:80px; left:70%; animation-duration:25s;"></div>
+<div class="bubble" style="width:35px; height:35px; left:90%; animation-duration:20s;"></div>
+
 <header>
   <h1>Unspoken Healer</h1>
   <h3>We have solution of everything</h3>
 </header>
 
-<section id="chatSection">
-  <div id="chatContainer">
-    <h2>Your Private Chat</h2>
-    <div id="chat"></div>
-    <div id="controls">
-      <input type="text" id="userInput" placeholder="Ask me anything...">
-      <button id="sendBtn">Send</button>
+<section>
+  <h2>Our Features</h2>
+  <div class="features">
+    <div class="feature">
+      <h3>💬 1-on-1 Chat</h3>
+      <p>Private, anonymous AI chat to discuss anything on your mind.</p>
     </div>
+    <div class="feature">
+      <h3>📞 Appointment</h3>
+      <p>Schedule a call with a real human consultant in a safe space.</p>
+    </div>
+    <div class="feature">
+      <h3>🧠 Emotional Support</h3>
+      <p>Get advice for stress, relationships, studies, or any life issue.</p>
+    </div>
+    <div class="feature">
+      <h3>⚡ Instant Help</h3>
+      <p>Real-time responses from our AI whenever you need it.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Choose Your Plan</h2>
+  <div class="pricing">
+    <div class="plan">
+      <h3>Weekly Plan</h3>
+      <p>₹110 for 7 days</p>
+      <a href="https://paypal.me/AbhishekBhandari734" target="_blank"><button>Pay with PayPal</button></a>
+      <a href="upi://pay?pa=paytmąrlj18py8rlj@paytm&pn=UnspokenHealer&am=110" target="_blank"><button>Pay with Paytm</button></a>
+    </div>
+    <div class="plan">
+      <h3>Monthly Plan</h3>
+      <p>₹470 (₹10 off)</p>
+      <a href="https://paypal.me/AbhishekBhandari734" target="_blank"><button>Pay with PayPal</button></a>
+      <a href="upi://pay?pa=paytmąrlj18py8rlj@paytm&pn=UnspokenHealer&am=470" target="_blank"><button>Pay with Paytm</button></a>
+    </div>
+  </div>
+  <button id="unlockChat">Start Chat After Payment</button>
+</section>
+
+<section>
+  <h2>Book a Consultation</h2>
+  <p>If you’d like to talk with a real consultant, tap below.</p>
+  <a href="mailto:infoabhishekbhandari@gmail.com?subject=Consultation Request">
+    <button>Request Appointment</button>
+  </a>
+</section>
+
+<section id="chatContainer">
+  <h2>Your Private Chat</h2>
+  <div id="chat"></div>
+  <div id="controls">
+    <input type="text" id="userInput" placeholder="Ask me anything...">
+    <button id="sendBtn">Send</button>
   </div>
 </section>
 
@@ -146,7 +208,9 @@
   <div class="popup-content">
     <h2>Before We Begin</h2>
     <p>Please agree to our 
-      <a href="https://abhishek252-sudo.github.io/unspoken-healer/" target="_blank">Terms & Services</a>.
+      <a href="https://abhishek252-sudo.github.io/unspoken-healer/" target="_blank">
+        Terms & Services
+      </a>.
     </p>
     <label><input type="checkbox" id="agreeTerms"> I agree</label><br><br>
     <button id="continueBtn">Continue</button>
