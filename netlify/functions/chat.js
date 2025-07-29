@@ -1,36 +1,40 @@
-// netlify/functions/chat.js
+const fetch = require("node-fetch");
 
-export async function handler(event) {
+exports.handler = async (event) => {
   try {
-    const { message } = JSON.parse(event.body || "{}");
-
-    if (!message) {
-      return { statusCode: 400, body: JSON.stringify({ error: "No message provided." }) };
-    }
+    const { message } = JSON.parse(event.body);
 
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`
+        "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
+        "Content-Type": "application/json"
       },
       body: JSON.stringify({
         model: "gpt-4o-mini",
-        messages: [{ role: "user", content: message }]
-      })
+        messages: [{ role: "user", content: message }],
+      }),
     });
 
     const data = await response.json();
 
-    return {
-      statusCode: response.status,
-      body: JSON.stringify(data)
-    };
+    if (!data || !data.choices || !data.choices[0].message) {
+      console.error("Unexpected API response:", data);
+      return {
+        statusCode: 500,
+        body: JSON.stringify({ reply: "⚠️ AI did not send a valid reply." }),
+      };
+    }
 
+    return {
+      statusCode: 200,
+      body: JSON.stringify({ reply: data.choices[0].message.content }),
+    };
   } catch (error) {
+    console.error("Chat API Error:", error);
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: error.message })
+      body: JSON.stringify({ reply: "⚠️ Error connecting to AI." }),
     };
   }
-}
+};
