@@ -1,69 +1,54 @@
 // script.js
+let agreed = false;
+let freeMessages = 5;
 
-// --------------------
-// Firebase Config (placeholder — replace with your Firebase project keys later)
-// --------------------
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
-
-const firebaseConfig = {
-  apiKey: "YOUR_FIREBASE_API_KEY",
-  authDomain: "YOUR_FIREBASE_AUTH_DOMAIN",
-  projectId: "YOUR_FIREBASE_PROJECT_ID",
-  appId: "YOUR_FIREBASE_APP_ID"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-
-// --------------------
-// DOM Elements
-// --------------------
 const chatBox = document.getElementById("chat");
 const input = document.getElementById("userInput");
 const sendBtn = document.getElementById("sendBtn");
 const freeCountEl = document.getElementById("freeCount");
-const statusEl = document.getElementById("status");
-
 const loginBtn = document.getElementById("loginBtn");
 const registerBtn = document.getElementById("registerBtn");
 const logoutBtn = document.getElementById("logoutBtn");
-
 const termsPopup = document.getElementById("termsPopup");
-const agreeTerms = document.getElementById("agreeTerms");
 const continueBtn = document.getElementById("continueBtn");
-
+const agreeTerms = document.getElementById("agreeTerms");
 const subscribePopup = document.getElementById("subscribePopup");
+const closeSubscribe = document.getElementById("closeSubscribe");
 
-// --------------------
-// State
-// --------------------
-let freeMessages = 5;
-let agreed = false;
+freeCountEl.textContent = freeMessages;
 
-// --------------------
-// Terms Agreement
-// --------------------
-continueBtn.addEventListener("click", () => {
-  if (agreeTerms.checked) {
-    termsPopup.classList.add("hidden");
-    agreed = true;
-  } else {
-    alert("Please agree to the terms before continuing.");
-  }
-});
-
-// --------------------
-// Chat Functionality
-// --------------------
+// Append messages
 function appendMessage(sender, message) {
   const msg = document.createElement("p");
-  msg.textContent = `${sender}: ${message}`;
+  msg.innerHTML = `<strong>${sender}:</strong> ${message}`;
   chatBox.appendChild(msg);
   chatBox.scrollTop = chatBox.scrollHeight;
 }
 
-sendBtn.addEventListener("click", () => {
+// AI Response using OpenAI API
+async function getAIResponse(message) {
+  try {
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer YOUR_OPENAI_API_KEY" // replace with real key
+      },
+      body: JSON.stringify({
+        model: "gpt-4o-mini",
+        messages: [{ role: "user", content: message }]
+      })
+    });
+
+    const data = await response.json();
+    return data.choices?.[0]?.message?.content || "Sorry, I didn’t understand that.";
+  } catch (error) {
+    return "⚠️ Network error. Please try again.";
+  }
+}
+
+// Send message
+sendBtn.addEventListener("click", async () => {
   if (!agreed) {
     alert("Please agree to the terms first.");
     return;
@@ -79,41 +64,44 @@ sendBtn.addEventListener("click", () => {
   appendMessage("You", userMessage);
   input.value = "";
 
-  setTimeout(() => {
-    appendMessage("Unspoken Healer", "Here's a helpful response!");
-  }, 500);
+  const reply = await getAIResponse(userMessage);
+  appendMessage("Unspoken Healer", reply);
 
   freeMessages--;
   freeCountEl.textContent = freeMessages;
 });
 
-// Allow Enter key to send
+// Allow pressing Enter to send
 input.addEventListener("keypress", (e) => {
-  if (e.key === "Enter") {
-    sendBtn.click();
-  }
+  if (e.key === "Enter") sendBtn.click();
 });
 
-// --------------------
-// Auth Placeholder
-// --------------------
+// Handle Terms Popup
+continueBtn.addEventListener("click", () => {
+  if (!agreeTerms.checked) {
+    alert("Please agree to the terms first.");
+    return;
+  }
+  agreed = true;
+  termsPopup.classList.add("hidden");
+  input.disabled = false;
+  sendBtn.disabled = false;
+});
+
+// Handle Subscribe Popup
+if (closeSubscribe) {
+  closeSubscribe.addEventListener("click", () => {
+    subscribePopup.classList.add("hidden");
+  });
+}
+
+// Auth buttons (for now just placeholders)
 loginBtn.addEventListener("click", () => {
   alert("Login feature coming soon (Firebase auth)");
 });
-
 registerBtn.addEventListener("click", () => {
   alert("Register feature coming soon (Firebase auth)");
 });
-
-logoutBtn.addEventListener("click", async () => {
-  try {
-    await signOut(auth);
-    alert("Logged out successfully.");
-    logoutBtn.classList.add("hidden");
-    loginBtn.classList.remove("hidden");
-    registerBtn.classList.remove("hidden");
-  } catch (error) {
-    console.error(error);
-    alert("Logout failed.");
-  }
+logoutBtn.addEventListener("click", () => {
+  alert("Logout feature coming soon");
 });
