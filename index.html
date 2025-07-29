@@ -7,22 +7,12 @@
   <style>
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
-      color: #333;
-      position: relative;
-      overflow-x: hidden;
-    }
-
-    /* Animated gradient background */
-    body::before {
-      content: "";
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: linear-gradient(-45deg, #4facfe, #00f2fe, #43e97b, #38f9d7);
+      font-family: "Segoe UI", Arial, sans-serif;
+      color: #f5f5f5;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
       background-size: 400% 400%;
       animation: gradientBG 15s ease infinite;
-      z-index: -2;
+      overflow-x: hidden;
     }
     @keyframes gradientBG {
       0% { background-position: 0% 50%; }
@@ -30,160 +20,195 @@
       100% { background-position: 0% 50%; }
     }
 
-    /* Floating bubbles */
-    .bubble {
-      position: fixed;
-      bottom: -100px;
-      background: rgba(255, 255, 255, 0.4);
-      border-radius: 50%;
-      animation: rise 20s infinite ease-in;
-      z-index: -1;
-    }
-    @keyframes rise {
-      0% { transform: translateY(0) scale(1); opacity: 0.7; }
-      100% { transform: translateY(-120vh) scale(0.5); opacity: 0; }
-    }
-
     header {
-      background: rgba(0,0,0,0.5);
-      color: white;
       text-align: center;
       padding: 40px 20px;
-      border-radius: 0 0 30px 30px;
+      background: rgba(0,0,0,0.6);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.8);
     }
+    header h1 {
+      font-size: 2.5em;
+      color: #00f2fe;
+      text-shadow: 0px 0px 15px rgba(0,242,254,0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    header h1::before {
+      content: "🌿";
+      margin-right: 10px;
+      font-size: 1.3em;
+    }
+    header h3 {
+      font-weight: 300;
+      color: #ddd;
+    }
+
+    /* Chat container at the top */
+    #chatSection {
+      display: flex;
+      justify-content: center;
+      margin-top: 30px;
+    }
+    #chatContainer {
+      width: 90%;
+      max-width: 600px;
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.7);
+      padding: 20px;
+    }
+    #chat {
+      height: 350px;
+      overflow-y: auto;
+      border: 1px solid rgba(255,255,255,0.3);
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 10px;
+      background: rgba(0,0,0,0.5);
+      color: white;
+    }
+    #controls {
+      display: flex;
+    }
+    #controls input {
+      flex: 1;
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
+      margin-right: 8px;
+      background: rgba(255,255,255,0.2);
+      color: #fff;
+    }
+    #controls button {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 10px;
+      background: #00f2fe;
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+    #controls button:hover {
+      transform: scale(1.05);
+    }
+
     section {
       padding: 40px 20px;
       max-width: 1000px;
       margin: auto;
     }
-    .features {
+    .features, .pricing {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 20px;
     }
-    .feature {
-      background: rgba(255,255,255,0.9);
+    .card {
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(8px);
+      border-radius: 12px;
       padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
       text-align: center;
-    }
-    .pricing {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-    }
-    .plan {
-      background: rgba(255,255,255,0.9);
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-      flex: 1;
-      text-align: center;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.6);
     }
     button {
       padding: 10px 20px;
       border: none;
       border-radius: 8px;
-      background: #4facfe;
-      color: white;
+      background: #00f2fe;
+      color: black;
+      font-weight: bold;
       cursor: pointer;
       margin-top: 10px;
       transition: transform 0.3s;
     }
     button:hover {
       transform: scale(1.05);
-      background: #00c6ff;
+      background: #00d4ff;
     }
-    #chatContainer {
-      display: none;
-      margin-top: 30px;
-      background: rgba(255,255,255,0.95);
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-      padding: 20px;
-    }
-    #chat {
-      height: 300px;
-      overflow-y: auto;
-      border: 1px solid #ddd;
-      padding: 10px;
-      margin-bottom: 10px;
-      border-radius: 8px;
-      background: #fafafa;
-    }
+
     .popup {
       position: fixed;
       top: 0; left: 0;
       width: 100%; height: 100%;
-      background: rgba(0,0,0,0.7);
+      background: rgba(0,0,0,0.85);
       display: flex;
       align-items: center;
       justify-content: center;
+      z-index: 1000;
     }
     .popup-content {
-      background: white;
+      background: #222;
+      color: white;
       padding: 20px;
       border-radius: 10px;
       max-width: 400px;
       text-align: center;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.9);
     }
     .hidden { display: none; }
   </style>
 </head>
 <body>
 
-<!-- Floating Bubbles -->
-<div class="bubble" style="width:40px; height:40px; left:10%; animation-duration:18s;"></div>
-<div class="bubble" style="width:60px; height:60px; left:30%; animation-duration:22s;"></div>
-<div class="bubble" style="width:25px; height:25px; left:50%; animation-duration:15s;"></div>
-<div class="bubble" style="width:80px; height:80px; left:70%; animation-duration:25s;"></div>
-<div class="bubble" style="width:35px; height:35px; left:90%; animation-duration:20s;"></div>
-
 <header>
   <h1>Unspoken Healer</h1>
   <h3>We have solution of everything</h3>
 </header>
 
+<!-- Chat on Main Screen -->
+<section id="chatSection">
+  <div id="chatContainer">
+    <h2>Your Private Chat</h2>
+    <div id="chat"></div>
+    <div id="controls">
+      <input type="text" id="userInput" placeholder="Ask me anything...">
+      <button id="sendBtn">Send</button>
+    </div>
+  </div>
+</section>
+
+<!-- Other Features -->
 <section>
   <h2>Our Features</h2>
   <div class="features">
-    <div class="feature">
+    <div class="card">
       <h3>💬 1-on-1 Chat</h3>
       <p>Private, anonymous AI chat to discuss anything on your mind.</p>
     </div>
-    <div class="feature">
+    <div class="card">
       <h3>📞 Appointment</h3>
-      <p>Schedule a call with a real human consultant in a safe space.</p>
+      <p>Schedule a call with a real consultant in a safe space.</p>
     </div>
-    <div class="feature">
+    <div class="card">
       <h3>🧠 Emotional Support</h3>
-      <p>Get advice for stress, relationships, studies, or any life issue.</p>
+      <p>Advice for stress, relationships, studies, or any life issue.</p>
     </div>
-    <div class="feature">
+    <div class="card">
       <h3>⚡ Instant Help</h3>
-      <p>Real-time responses from our AI whenever you need it.</p>
+      <p>Real-time responses whenever you need support.</p>
     </div>
   </div>
 </section>
 
 <section>
-  <h2>Choose Your Plan</h2>
+  <h2>Plans & Pricing</h2>
   <div class="pricing">
-    <div class="plan">
+    <div class="card">
       <h3>Weekly Plan</h3>
       <p>₹110 for 7 days</p>
       <a href="https://paypal.me/AbhishekBhandari734" target="_blank"><button>Pay with PayPal</button></a>
       <a href="upi://pay?pa=paytmąrlj18py8rlj@paytm&pn=UnspokenHealer&am=110" target="_blank"><button>Pay with Paytm</button></a>
     </div>
-    <div class="plan">
+    <div class="card">
       <h3>Monthly Plan</h3>
       <p>₹470 (₹10 off)</p>
       <a href="https://paypal.me/AbhishekBhandari734" target="_blank"><button>Pay with PayPal</button></a>
       <a href="upi://pay?pa=paytmąrlj18py8rlj@paytm&pn=UnspokenHealer&am=470" target="_blank"><button>Pay with Paytm</button></a>
     </div>
   </div>
-  <button id="unlockChat">Start Chat After Payment</button>
 </section>
 
 <section>
@@ -194,23 +219,12 @@
   </a>
 </section>
 
-<section id="chatContainer">
-  <h2>Your Private Chat</h2>
-  <div id="chat"></div>
-  <div id="controls">
-    <input type="text" id="userInput" placeholder="Ask me anything...">
-    <button id="sendBtn">Send</button>
-  </div>
-</section>
-
 <!-- Terms Popup -->
 <div id="termsPopup" class="popup">
   <div class="popup-content">
     <h2>Before We Begin</h2>
     <p>Please agree to our 
-      <a href="https://abhishek252-sudo.github.io/unspoken-healer/" target="_blank">
-        Terms & Services
-      </a>.
+      <a href="https://abhishek252-sudo.github.io/unspoken-healer/" target="_blank">Terms & Services</a>.
     </p>
     <label><input type="checkbox" id="agreeTerms"> I agree</label><br><br>
     <button id="continueBtn">Continue</button>
