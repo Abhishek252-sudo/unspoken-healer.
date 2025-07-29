@@ -3,229 +3,76 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Unspoken Healer - We Have Solution of Everything</title>
+  <title>Unspoken Healer</title>
 
-  <!-- Firebase SDK -->
+  <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
 
   <style>
-    body {
-      margin: 0;
-      font-family: "Segoe UI", Arial, sans-serif;
-      color: #f5f5f5;
-      background: url('https://images.unsplash.com/photo-1501594907352-04cda38ebc29?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80')
-        no-repeat center center fixed;
-      background-size: cover;
-      position: relative;
-      overflow-x: hidden;
-    }
-    body::before {
-      content: "";
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.65);
-      z-index: -1;
-    }
-    header {
-      text-align: center;
-      padding: 30px 20px;
-      background: rgba(0,0,0,0.6);
-      box-shadow: 0 4px 20px rgba(0,0,0,0.8);
-      position: relative;
-    }
-    header h1 {
-      font-size: 2.5em;
-      color: #00f2fe;
-      text-shadow: 0px 0px 20px rgba(0,242,254,0.7);
-    }
-    header h3 {
-      font-weight: 300;
-      color: #ddd;
-    }
-    .auth-buttons {
-      position: absolute;
-      top: 20px;
-      right: 30px;
-    }
-    .auth-buttons button {
-      margin-left: 10px;
-      background: #00f2fe;
-      color: #000;
-      border: none;
-      padding: 8px 15px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-    #chatSection {
-      display: flex;
-      justify-content: center;
-      margin: 40px auto;
-    }
-    #chatContainer {
-      width: 95%;
-      max-width: 650px;
-      background: rgba(255,255,255,0.08);
-      backdrop-filter: blur(15px);
-      border-radius: 15px;
-      box-shadow: 0 6px 25px rgba(0,0,0,0.8);
-      padding: 20px;
-    }
-    #chat {
-      height: 350px;
-      overflow-y: auto;
-      border: 1px solid rgba(255,255,255,0.3);
-      padding: 10px;
-      margin-bottom: 10px;
-      border-radius: 10px;
-      background: rgba(0,0,0,0.6);
-      color: white;
-    }
-    #controls {
-      display: flex;
-    }
-    #controls input {
-      flex: 1;
-      padding: 12px;
-      border-radius: 10px;
-      border: none;
-      margin-right: 8px;
-      background: rgba(255,255,255,0.2);
-      color: #fff;
-    }
-    #controls button {
-      padding: 12px 20px;
-      border: none;
-      border-radius: 10px;
-      background: #00f2fe;
-      color: #000;
-      font-weight: bold;
-      cursor: pointer;
-      transition: transform 0.3s;
-    }
-    #controls button:hover {
-      transform: scale(1.05);
-    }
-    #status {
-      margin-top: 5px;
-      font-size: 0.9em;
-      color: #ccc;
-    }
-    .popup {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.9);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-    }
-    .popup-content {
-      background: #222;
-      color: white;
-      padding: 20px;
-      border-radius: 10px;
-      max-width: 400px;
-      text-align: center;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.9);
-    }
-    .hidden { display: none; }
-    section { padding: 40px 20px; max-width: 1000px; margin: auto; }
-    .features, .pricing {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-    }
-    .card {
-      background: rgba(255,255,255,0.1);
-      backdrop-filter: blur(10px);
-      border-radius: 12px;
-      padding: 20px;
-      text-align: center;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.7);
-    }
-    .card h3 { color: #00f2fe; }
-    .card button {
-      padding: 10px 20px;
-      border: none;
-      border-radius: 8px;
-      background: #00f2fe;
-      color: black;
-      font-weight: bold;
-      cursor: pointer;
-      margin-top: 10px;
-      transition: transform 0.3s;
-    }
-    .card button:hover {
-      transform: scale(1.05);
-      background: #00d4ff;
-    }
+    body { font-family: Arial, sans-serif; background:#111; color:#eee; margin:0; }
+    header { padding:20px; background:#222; color:#00f2fe; text-align:center; position:relative; }
+    .auth-buttons { position:absolute; right:20px; top:20px; }
+    .auth-buttons button { margin-left:5px; padding:6px 12px; background:#00f2fe; border:none; cursor:pointer; border-radius:6px; }
+    #chatContainer { width:90%; max-width:600px; margin:40px auto; padding:20px; background:#222; border-radius:10px; }
+    #chat { height:250px; overflow-y:auto; border:1px solid #555; margin-bottom:10px; padding:10px; }
+    #controls input { width:75%; padding:10px; }
+    #controls button { padding:10px; }
+    .popup { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); justify-content:center; align-items:center; }
+    .popup-content { background:#333; padding:20px; border-radius:8px; max-width:400px; text-align:center; }
+    .popup input { width:90%; margin:8px 0; padding:8px; }
+    .toggle-link { color:#00f2fe; cursor:pointer; display:block; margin-top:10px; }
   </style>
 </head>
 <body>
 
 <header>
   <h1>Unspoken Healer 🌌</h1>
-  <h3>We have solution of everything</h3>
   <div class="auth-buttons">
     <button id="loginBtn">Login</button>
-    <button id="logoutBtn" class="hidden">Logout</button>
+    <button id="logoutBtn" style="display:none;">Logout</button>
   </div>
 </header>
 
-<section id="chatSection">
-  <div id="chatContainer">
-    <h2>Your Private Chat</h2>
-    <div id="chat"></div>
-    <div id="controls">
-      <input type="text" id="userInput" placeholder="Ask me anything..." disabled>
-      <button id="sendBtn" disabled>Send</button>
-    </div>
-    <p id="status">Please login & agree to terms before chatting.</p>
+<div id="chatContainer">
+  <h2>Your Private Chat</h2>
+  <div id="chat"></div>
+  <div id="controls">
+    <input type="text" id="userInput" placeholder="Ask me anything..." disabled>
+    <button id="sendBtn" disabled>Send</button>
   </div>
-</section>
+  <p id="status">Please login and agree to terms before chatting.</p>
+</div>
 
-<section>
-  <h2>Our Features</h2>
-  <div class="features">
-    <div class="card"><h3>💬 1-on-1 Chat</h3><p>Private AI chat for any emotional or personal problem.</p></div>
-    <div class="card"><h3>📞 Appointment</h3><p>Book a safe, one-on-one consultation via email.</p></div>
-    <div class="card"><h3>🧠 Emotional Support</h3><p>Guidance for stress, studies, and relationships.</p></div>
-    <div class="card"><h3>⚡ Instant Help</h3><p>Get immediate responses when you need them most.</p></div>
-  </div>
-</section>
-
-<section>
-  <h2>Plans & Pricing</h2>
-  <div class="pricing">
-    <div class="card">
-      <h3>Weekly Plan</h3>
-      <p>₹110 for 7 days</p>
-      <a href="https://paypal.me/AbhishekBhandari734" target="_blank"><button>Pay with PayPal</button></a>
-      <a href="upi://pay?pa=paytmąrlj18py8rlj@paytm&pn=UnspokenHealer&am=110" target="_blank"><button>Pay with Paytm</button></a>
+<!-- Login/Register Popup -->
+<div id="authPopup" class="popup">
+  <div class="popup-content">
+    <h2 id="popupTitle">Login</h2>
+    <div id="loginForm">
+      <input type="email" id="email" placeholder="Email"><br>
+      <input type="password" id="password" placeholder="Password"><br>
+      <button id="emailLogin">Login with Email</button>
+      <hr>
+      <input type="text" id="phone" placeholder="+91XXXXXXXXXX"><br>
+      <div id="recaptcha-container"></div>
+      <button id="phoneLogin">Send OTP</button>
+      <input type="text" id="otp" placeholder="Enter OTP"><br>
+      <button id="verifyOtp">Verify OTP</button>
+      <span class="toggle-link" id="showRegister">Don't have an account? Register</span>
     </div>
-    <div class="card">
-      <h3>Monthly Plan</h3>
-      <p>₹470 (₹10 off)</p>
-      <a href="https://paypal.me/AbhishekBhandari734" target="_blank"><button>Pay with PayPal</button></a>
-      <a href="upi://pay?pa=paytmąrlj18py8rlj@paytm&pn=UnspokenHealer&am=470" target="_blank"><button>Pay with Paytm</button></a>
+    <div id="registerForm" style="display:none;">
+      <input type="email" id="regEmail" placeholder="Email"><br>
+      <input type="password" id="regPassword" placeholder="Password"><br>
+      <button id="emailRegister">Register</button>
+      <span class="toggle-link" id="showLogin">Already have an account? Login</span>
     </div>
+    <br>
+    <button onclick="document.getElementById('authPopup').style.display='none'">Close</button>
   </div>
-</section>
-
-<section>
-  <h2>Book a Consultation</h2>
-  <p>Want a human touch? Tap below to request a call.</p>
-  <a href="mailto:infoabhishekbhandari@gmail.com?subject=Consultation Request">
-    <button>Request Appointment</button>
-  </a>
-</section>
+</div>
 
 <!-- Terms Popup -->
-<div id="termsPopup" class="popup">
+<div id="termsPopup" class="popup" style="display:flex;">
   <div class="popup-content">
     <h2>Before We Begin</h2>
     <p>Please agree to our 
@@ -237,73 +84,118 @@
 </div>
 
 <script>
-  // Firebase config
+  // Firebase Config
   const firebaseConfig = {
     apiKey: "AIzaSyDpSDZydyYmVv_cB_xErTL_KiKx0l11dEM",
     authDomain: "unspokenhealer-f626a.firebaseapp.com",
     projectId: "unspokenhealer-f626a",
     storageBucket: "unspokenhealer-f626a.firebasestorage.app",
     messagingSenderId: "1009119300737",
-    appId: "1:1009119300737:web:1ae60b6caf0c7389fc5180",
-    measurementId: "G-T44HTFGYSE"
+    appId: "1:1009119300737:web:1ae60b6caf0c7389fc5180"
   };
   firebase.initializeApp(firebaseConfig);
   const auth = firebase.auth();
 
-  const loginBtn = document.getElementById('loginBtn');
-  const logoutBtn = document.getElementById('logoutBtn');
-  const statusText = document.getElementById('status');
+  let termsAgreed = false;
   const userInput = document.getElementById('userInput');
   const sendBtn = document.getElementById('sendBtn');
-  const popup = document.getElementById('termsPopup');
-  let termsAgreed = false;
+  const statusText = document.getElementById('status');
 
-  loginBtn.addEventListener('click', () => {
-    const provider = new firebase.auth.GoogleAuthProvider();
-    auth.signInWithPopup(provider)
-      .then(() => alert('✅ Logged in'))
+  document.getElementById('continueBtn').onclick = () => {
+    if (document.getElementById('agreeTerms').checked) {
+      termsAgreed = true;
+      document.getElementById('termsPopup').style.display = 'none';
+      if (auth.currentUser) enableChat(auth.currentUser.email || auth.currentUser.phoneNumber);
+    } else {
+      alert('Please agree to continue.');
+    }
+  };
+
+  document.getElementById('loginBtn').onclick = () => {
+    document.getElementById('authPopup').style.display = 'flex';
+  };
+
+  // Toggle forms
+  document.getElementById('showRegister').onclick = () => {
+    document.getElementById('loginForm').style.display = 'none';
+    document.getElementById('registerForm').style.display = 'block';
+    document.getElementById('popupTitle').innerText = 'Register';
+  };
+  document.getElementById('showLogin').onclick = () => {
+    document.getElementById('registerForm').style.display = 'none';
+    document.getElementById('loginForm').style.display = 'block';
+    document.getElementById('popupTitle').innerText = 'Login';
+  };
+
+  // Email Login
+  document.getElementById('emailLogin').onclick = () => {
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    auth.signInWithEmailAndPassword(email, password)
+      .then(() => {
+        alert('Logged in with Email!');
+        document.getElementById('authPopup').style.display = 'none';
+      })
       .catch(err => alert(err.message));
-  });
+  };
 
-  logoutBtn.addEventListener('click', () => {
-    auth.signOut().then(() => alert('👋 Logged out'));
-  });
+  // Email Register
+  document.getElementById('emailRegister').onclick = () => {
+    const email = document.getElementById('regEmail').value;
+    const password = document.getElementById('regPassword').value;
+    auth.createUserWithEmailAndPassword(email, password)
+      .then(() => {
+        alert('Account created!');
+        document.getElementById('authPopup').style.display = 'none';
+      })
+      .catch(err => alert(err.message));
+  };
+
+  // Phone OTP
+  window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container');
+  document.getElementById('phoneLogin').onclick = () => {
+    const phone = document.getElementById('phone').value;
+    auth.signInWithPhoneNumber(phone, window.recaptchaVerifier)
+      .then(conf => window.confirmationResult = conf)
+      .catch(err => alert(err.message));
+  };
+
+  document.getElementById('verifyOtp').onclick = () => {
+    const code = document.getElementById('otp').value;
+    window.confirmationResult.confirm(code)
+      .then(() => {
+        alert('Phone verified!');
+        document.getElementById('authPopup').style.display = 'none';
+      })
+      .catch(err => alert(err.message));
+  };
+
+  // Logout
+  document.getElementById('logoutBtn').onclick = () => auth.signOut();
 
   auth.onAuthStateChanged(user => {
     if (user && termsAgreed) {
-      enableChat(user.displayName);
+      enableChat(user.email || user.phoneNumber);
     } else {
       disableChat();
     }
   });
 
   function enableChat(name) {
-    loginBtn.style.display = 'none';
-    logoutBtn.classList.remove('hidden');
-    statusText.textContent = 'Logged in as ' + name;
+    document.getElementById('loginBtn').style.display = 'none';
+    document.getElementById('logoutBtn').style.display = 'inline-block';
     userInput.disabled = false;
     sendBtn.disabled = false;
+    statusText.textContent = "Logged in as " + name;
   }
 
   function disableChat() {
-    loginBtn.style.display = 'inline-block';
-    logoutBtn.classList.add('hidden');
-    statusText.textContent = 'Please login & agree to terms before chatting.';
+    document.getElementById('loginBtn').style.display = 'inline-block';
+    document.getElementById('logoutBtn').style.display = 'none';
     userInput.disabled = true;
     sendBtn.disabled = true;
+    statusText.textContent = "Please login and agree to terms before chatting.";
   }
-
-  document.getElementById('continueBtn').addEventListener('click', () => {
-    if (document.getElementById('agreeTerms').checked) {
-      termsAgreed = true;
-      popup.style.display = 'none';
-      if (auth.currentUser) {
-        enableChat(auth.currentUser.displayName);
-      }
-    } else {
-      alert('⚠️ You must agree to continue.');
-    }
-  });
 </script>
 
 </body>
