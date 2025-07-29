@@ -4,118 +4,118 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Unspoken Healer - We Have Solution of Everything</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
     body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to right, #4facfe, #00f2fe);
       margin: 0;
-      font-family: 'Poppins', sans-serif;
-      background: url('https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1600&q=80') no-repeat center center/cover;
-      height: 100vh;
-      color: #fff;
-      overflow: hidden;
-    }
-    .overlay {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.6);
-      z-index: -1;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
     }
     header {
       text-align: center;
-      padding: 20px;
-      font-size: 26px;
-      font-weight: bold;
-      color: #ffdd57;
-      animation: fadeIn 2s ease;
-    }
-    .tagline {
-      text-align: center;
-      font-size: 18px;
-      margin-bottom: 15px;
-    }
-    #terms-popup {
-      background: #222;
+      margin-bottom: 20px;
       color: white;
-      padding: 20px;
-      width: 90%;
-      max-width: 400px;
-      margin: 60px auto;
-      border-radius: 15px;
-      text-align: center;
-      box-shadow: 0px 4px 10px rgba(0,0,0,0.6);
-      animation: popIn 1s ease;
     }
-    #terms-popup img {
-      width: 120px;
-      margin-bottom: 15px;
-    }
-    #chat-box {
+    #chatContainer {
       display: none;
       width: 90%;
-      max-width: 500px;
-      margin: 20px auto;
-      background: rgba(34,34,34,0.9);
-      border-radius: 15px;
-      padding: 15px;
-      box-shadow: 0px 4px 12px rgba(0,0,0,0.7);
-      animation: fadeIn 1s ease;
+      max-width: 600px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      padding: 20px;
     }
-    #chat-content {
+    #chat {
       height: 300px;
       overflow-y: auto;
+      border: 1px solid #ddd;
       padding: 10px;
-      background: rgba(0,0,0,0.6);
-      border-radius: 10px;
       margin-bottom: 10px;
+      border-radius: 8px;
+      background: #fafafa;
     }
-    #user-input {
-      width: 70%;
-      padding: 8px;
+    #chat div {
+      margin: 8px 0;
+    }
+    #controls {
+      display: flex;
+    }
+    #controls input {
+      flex: 1;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      margin-right: 8px;
+    }
+    #controls button {
+      padding: 10px 20px;
       border: none;
       border-radius: 8px;
-    }
-    #send-btn {
-      padding: 8px 15px;
-      border: none;
-      background: #ffdd57;
-      color: #000;
-      border-radius: 8px;
+      background: #4facfe;
+      color: white;
       cursor: pointer;
-      transition: background 0.3s;
     }
-    #send-btn:hover {
-      background: #ffc107;
+    .popup {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-20px); }
-      to { opacity: 1; transform: translateY(0); }
+    .popup-content {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 400px;
+      text-align: center;
     }
-    @keyframes popIn {
-      from { transform: scale(0.5); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
-    }
+    .hidden { display: none; }
   </style>
 </head>
 <body>
-  <div class="overlay"></div>
-  <header>🌿 Unspoken Healer</header>
-  <p class="tagline">We Have Solution of Everything</p>
+  <header>
+    <h1>Unspoken Healer</h1>
+    <h3>We have solution of everything</h3>
+  </header>
 
   <!-- Terms Popup -->
-  <div id="terms-popup">
-    <img src="https://cdn-icons-png.flaticon.com/512/3064/3064197.png" alt="Healing">
-    <p>Please agree to our Terms of Service before starting the chat.</p>
-    <a href="https://abhishek252-sudo.github.io/unspoken-healer/" target="_blank">📜 Read Terms</a><br><br>
-    <input type="checkbox" id="agree-checkbox"> I agree to the Terms<br><br>
-    <button id="agree-btn">Continue</button>
+  <div id="termsPopup" class="popup">
+    <div class="popup-content">
+      <h2>Before We Begin</h2>
+      <p>Please agree to our <a href="https://abhishek252-sudo.github.io/unspoken-healer/" target="_blank">Terms & Services</a>.</p>
+      <label><input type="checkbox" id="agreeTerms"> I agree</label><br><br>
+      <button id="continueBtn">Continue</button>
+    </div>
   </div>
 
-  <!-- Chat Box -->
-  <div id="chat-box">
-    <div id="chat-content"></div>
-    <input type="text" id="user-input" placeholder="Type your message...">
-    <button id="send-btn">Send</button>
+  <!-- Payment Section -->
+  <div id="paymentSection" class="hidden">
+    <h2>Start Your Healing Journey</h2>
+    <p>₹110 for 7 days access. Monthly plan available with ₹10 off.</p>
+    <a href="https://paypal.me/AbhishekBhandari734" target="_blank">
+      <button>Pay with PayPal</button>
+    </a>
+    <a href="upi://pay?pa=paytmąrlj18py8rlj@paytm&pn=UnspokenHealer&am=110" target="_blank">
+      <button>Pay with Paytm UPI</button>
+    </a>
+    <p>After payment, click below to start chatting:</p>
+    <button id="unlockChat">Start Chat</button>
+  </div>
+
+  <!-- Chat Section -->
+  <div id="chatContainer">
+    <div id="chat"></div>
+    <div id="controls">
+      <input type="text" id="userInput" placeholder="Ask me anything...">
+      <button id="sendBtn">Send</button>
+    </div>
   </div>
 
   <script src="script.js"></script>
