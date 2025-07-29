@@ -1,6 +1,4 @@
-const fetch = require("node-fetch");
-
-exports.handler = async (event) => {
+export async function handler(event) {
   try {
     const { message } = JSON.parse(event.body);
 
@@ -12,13 +10,13 @@ exports.handler = async (event) => {
       },
       body: JSON.stringify({
         model: "gpt-4o-mini",
-        messages: [{ role: "user", content: message }],
+        messages: [{ role: "user", content: message }]
       }),
     });
 
     const data = await response.json();
 
-    if (!data || !data.choices || !data.choices[0].message) {
+    if (!data.choices || !data.choices[0].message) {
       console.error("Unexpected API response:", data);
       return {
         statusCode: 500,
@@ -37,4 +35,4 @@ exports.handler = async (event) => {
       body: JSON.stringify({ reply: "⚠️ Error connecting to AI." }),
     };
   }
-};
+}
