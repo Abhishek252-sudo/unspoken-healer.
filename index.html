@@ -18,9 +18,12 @@
       text-align: center;
       font-size: 1.8rem;
       font-weight: bold;
+      position: relative;
     }
     header span {
-      float: right;
+      position: absolute;
+      top: 15px;
+      right: 20px;
     }
     header button {
       background: #1db954;
@@ -36,12 +39,10 @@
       margin: 1rem auto;
       padding: 1.2rem;
       border-radius: 10px;
-      max-width: 800px;
+      max-width: 900px;
       box-shadow: 0px 4px 15px rgba(0,0,0,0.5);
     }
-    h2 {
-      color: #1db954;
-    }
+    h2 { color: #1db954; }
     button.plan-btn {
       background: #1db954;
       color: white;
@@ -56,9 +57,10 @@
       background: rgba(20,20,20,0.9);
       padding: 1rem;
       border-radius: 10px;
+      margin-top: 1rem;
     }
     .chat-messages {
-      height: 200px;
+      height: 300px;
       overflow-y: auto;
       background: rgba(0,0,0,0.6);
       margin-bottom: 0.5rem;
@@ -83,14 +85,19 @@
       border-radius: 6px;
       cursor: pointer;
     }
+    .support-options {
+      display: flex;
+      justify-content: space-around;
+      margin: 1rem 0;
+    }
     .support-options button {
       background: #007bff;
       border: none;
       color: white;
-      padding: 0.6rem 1rem;
-      margin: 0.4rem;
+      padding: 0.8rem 1.2rem;
       border-radius: 6px;
       cursor: pointer;
+      font-weight: bold;
     }
     textarea {
       width: 100%;
@@ -131,9 +138,9 @@
       <div id="start-screen">
         <button class="plan-btn" onclick="startChat()">Start</button>
       </div>
-      <div id="option-screen" style="display:none;">
-        <button onclick="openChat('Chat with Consultant')">💬 Chat with Consultant</button>
-        <button onclick="openChat('Voice Chat with Consultant')">🎤 Voice Chat with Consultant</button>
+      <div id="option-screen" style="display:none;" class="support-options">
+        <button onclick="openChat('chat')">💬 Chat with Consultant</button>
+        <button onclick="openChat('voice')">🎤 Voice Chat with Consultant</button>
       </div>
       <div id="chat-screen" style="display:none;">
         <div class="chat-messages" id="chatMessages"></div>
@@ -150,11 +157,11 @@
     <h2>Our Plans</h2>
     <h3>One-Day Plan</h3>
     <p>₹110 for 1-hour session</p>
-    <button class="plan-btn" onclick="redirectPayment('day')">Pay & Activate</button>
+    <button class="plan-btn" onclick="choosePayment('day')">Activate Plan</button>
 
     <h3>Weekly Plan</h3>
     <p>₹770 for 7 days (+30min bonus each day)</p>
-    <button class="plan-btn" onclick="redirectPayment('week')">Pay & Activate</button>
+    <button class="plan-btn" onclick="choosePayment('week')">Activate Plan</button>
   </section>
 
   <section>
@@ -172,18 +179,6 @@
     <p id="review-msg"></p>
   </section>
 
-  <section>
-    <h2>FAQ</h2>
-    <p><b>Q:</b> How do I start?<br><b>A:</b> Tap “Start” and choose a support option.</p>
-    <p><b>Q:</b> What payment methods do you support?<br><b>A:</b> UPI and PayPal for now.</p>
-    <p><b>Q:</b> Can I upgrade my plan later?<br><b>A:</b> Yes, you can always purchase a new plan.</p>
-  </section>
-
-  <section>
-    <h2>Contact Us</h2>
-    <p>Email: support@unspokenhealer.com</p>
-  </section>
-
   <footer>
     <p>© 2025 Unspoken Healer | <a href="#">Terms of Service</a> | <a href="#">Privacy Policy</a></p>
   </footer>
@@ -195,20 +190,23 @@
     function register() { alert("Register feature coming soon (Firebase Auth)."); }
     function logout() { alert("Logged out!"); }
 
-    function redirectPayment(plan) {
-      let paymentChoice = confirm("Click OK to pay via PayPal, or Cancel for UPI.");
-      if (paymentChoice) {
-        window.open("https://www.paypal.me/AbhishekBhandari734", "_blank");
+    function choosePayment(plan) {
+      let method = prompt("Choose Payment Method: type 'upi' or 'paypal'");
+      if (!method) return;
+      redirectPayment(plan, method);
+    }
+
+    function redirectPayment(plan, method) {
+      let amount = plan === 'day' ? "110" : "770";
+      if (method.toLowerCase() === "paypal") {
+        window.open("https://www.paypal.me/AbhishekBhandari734/" + amount, "_blank");
       } else {
-        window.open("upi://pay?pa=paytmqr1j18py8r1j@paytm&pn=Unspoken%20Healer&mc=0000&tid=1234567890&tr=9876543210&tn=Consultation%20Payment&am=" + (plan === 'day' ? "110" : "770") + "&cu=INR", "_blank");
+        window.open("upi://pay?pa=paytmqr1j18py8r1j@paytm&pn=Unspoken%20Healer&am=" + amount + "&cu=INR", "_blank");
       }
 
       setTimeout(() => {
-        let confirmPayment = confirm("Have you completed the payment?");
-        if (confirmPayment) {
+        if (confirm("Have you completed the payment?")) {
           activatePlan(plan);
-        } else {
-          alert("Please complete the payment to activate the plan.");
         }
       }, 3000);
     }
@@ -216,27 +214,34 @@
     function activatePlan(plan) {
       if (plan === 'day') {
         sessions = 1;
-        alert("One-Day Plan activated! 1 session added.");
-      } else if (plan === 'week') {
+      } else {
         sessions = 7;
-        alert("Weekly Plan activated! 7 sessions added.");
       }
       document.getElementById('sessions').textContent = sessions;
+      alert("Plan activated successfully!");
     }
 
     function startChat() {
       if (sessions > 0) {
         document.getElementById('start-screen').style.display = "none";
-        document.getElementById('option-screen').style.display = "block";
+        document.getElementById('option-screen').style.display = "flex";
       } else {
-        alert("Please activate a plan to start chatting.");
+        alert("Please activate a plan first.");
       }
     }
 
-    function openChat(option) {
+    function openChat(type) {
       document.getElementById('option-screen').style.display = "none";
       document.getElementById('chat-screen').style.display = "block";
-      document.getElementById('chatMessages').innerHTML += `<p><i>Started ${option}</i></p>`;
+      let msgBox = document.getElementById('chatMessages');
+      if (type === 'chat') {
+        msgBox.innerHTML += "<p><i>Started Chat with Consultant</i></p>";
+      } else {
+        let wait = Math.floor(Math.random() * 5) + 1;
+        document.getElementById('waitTime').textContent = wait;
+        msgBox.innerHTML += `<p><i>Voice Chat will start soon. Estimated wait time: ${wait} minutes.</i></p>
+        <p><a href='#' style='color:#1db954;'>🔗 Join Voice Call</a></p>`;
+      }
     }
 
     function sendMessage() {
