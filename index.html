@@ -1,255 +1,199 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Unspoken Healer</title>
-
-    <style>
-        /* Basic styles */
-        body {
-            font-family: Arial, sans-serif;
-            background: #f0f0f0;
-            margin: 0;
-            padding: 0;
-            color: #333;
-        }
-
-        .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: 20px auto;
-            padding: 20px;
-            background: #fff;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #111;
-            color: #fff;
-            padding: 10px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        header h1 {
-            margin: 0;
-        }
-
-        .buttons {
-            display: flex;
-            gap: 10px;
-        }
-
-        .buttons a {
-            background-color: #28a745;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            text-decoration: none;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .buttons a:hover {
-            background-color: #218838;
-        }
-
-        .feature-section,
-        .plan-section,
-        .review-section {
-            margin-top: 30px;
-        }
-
-        .plan-section .plan {
-            background-color: #f8f9fa;
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .plan .plan-title {
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-
-        .plan .price {
-            font-size: 1.2rem;
-            color: #007bff;
-        }
-
-        .review-section textarea {
-            width: 100%;
-            height: 100px;
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-
-        .review-section button {
-            background-color: #007bff;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            border: none;
-            cursor: pointer;
-        }
-
-        .review-section button:hover {
-            background-color: #0056b3;
-        }
-
-        .plan-button {
-            display: inline-block;
-            margin-top: 10px;
-            padding: 10px 15px;
-            background-color: #007bff;
-            color: white;
-            border-radius: 5px;
-            text-decoration: none;
-        }
-
-        .plan-button:hover {
-            background-color: #0056b3;
-        }
-
-        .subscription-popup {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            justify-content: center;
-            align-items: center;
-        }
-
-        .subscription-popup .popup-content {
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            max-width: 500px;
-            width: 90%;
-        }
-
-        .subscription-popup button {
-            background-color: #007bff;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            border: none;
-            cursor: pointer;
-            width: 100%;
-        }
-
-        .subscription-popup button:hover {
-            background-color: #0056b3;
-        }
-    </style>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unspoken Healer 🌌</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e') no-repeat center center fixed;
+      background-size: cover;
+      color: white;
+    }
+    header {
+      background: rgba(0, 0, 0, 0.7);
+      padding: 1rem;
+      text-align: center;
+      font-size: 1.8rem;
+      font-weight: bold;
+    }
+    header span {
+      float: right;
+    }
+    header button {
+      background: #1db954;
+      color: white;
+      border: none;
+      padding: 0.4rem 0.8rem;
+      margin-left: 0.5rem;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    section {
+      background: rgba(0, 0, 0, 0.7);
+      margin: 1rem auto;
+      padding: 1.2rem;
+      border-radius: 10px;
+      max-width: 800px;
+      box-shadow: 0px 4px 15px rgba(0,0,0,0.5);
+    }
+    h2 {
+      color: #1db954;
+    }
+    button.plan-btn {
+      background: #1db954;
+      color: white;
+      padding: 0.6rem 1.2rem;
+      margin: 0.5rem 0;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .support-options button {
+      background: #007bff;
+      border: none;
+      color: white;
+      padding: 0.6rem 1rem;
+      margin: 0.4rem;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    textarea {
+      width: 100%;
+      height: 80px;
+      margin-top: 0.5rem;
+      border-radius: 6px;
+      padding: 0.6rem;
+      border: none;
+      resize: none;
+    }
+    footer {
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.9rem;
+      background: rgba(0,0,0,0.8);
+    }
+  </style>
 </head>
-
 <body>
+  <header>
+    Unspoken Healer 🌌
+    <span>
+      <button onclick="login()">Login</button>
+      <button onclick="register()">Register</button>
+      <button onclick="logout()">Logout</button>
+    </span>
+  </header>
 
-    <header>
-        <h1>Unspoken Healer</h1>
-        <div class="buttons">
-            <a href="#" id="login-btn">Login</a>
-            <a href="#" id="register-btn">Register</a>
-        </div>
-    </header>
-
-    <div class="container">
-
-        <h2>Remaining Sessions: <span id="remaining-sessions">0</span></h2>
-
-        <div class="feature-section">
-            <h3>Choose Your Support</h3>
-            <p>Select a service below. If you don’t have an active plan, you’ll be asked to subscribe.</p>
-
-            <button class="plan-button" onclick="showSubscriptionPopup('one-day')">One-Day Plan</button>
-            <button class="plan-button" onclick="showSubscriptionPopup('weekly')">Weekly Plan</button>
-        </div>
-
-        <div class="plan-section">
-            <h3>Our Plans</h3>
-
-            <div class="plan" id="one-day-plan">
-                <div class="plan-title">One-Day Plan</div>
-                <div class="price">₹110 for 1-hour session</div>
-                <button onclick="selectPlan('one-day')">Activate Plan</button>
-            </div>
-
-            <div class="plan" id="weekly-plan">
-                <div class="plan-title">Weekly Plan</div>
-                <div class="price">₹770 for 7 days (+30min bonus each day)</div>
-                <button onclick="selectPlan('weekly')">Activate Plan</button>
-            </div>
-        </div>
-
-        <div class="review-section">
-            <h3>Share Your Experience</h3>
-            <textarea id="review-text" placeholder="Write your review..."></textarea><br>
-            <button onclick="submitReview()">Submit Review</button>
-        </div>
-
+  <section>
+    <h2>Remaining Sessions: <span id="sessions">0</span></h2>
+    <h3>Choose Your Support</h3>
+    <p>Select a service below. If you don’t have an active plan, you’ll be asked to subscribe.</p>
+    <div class="support-options">
+      <button onclick="checkPlan('Live Chat with Consultant')">💬 Live Chat with Consultant</button>
+      <button onclick="checkPlan('Second Opinion')">📄 Second Opinion</button>
+      <button onclick="checkPlan('Voice Chat with Consultant')">🎤 Voice Chat with Consultant</button>
     </div>
+  </section>
 
-    <!-- Subscription Popup -->
-    <div class="subscription-popup" id="subscription-popup">
-        <div class="popup-content">
-            <h3>Subscription Required</h3>
-            <p id="popup-plan-description"></p>
-            <button onclick="closePopup()">Close</button>
-        </div>
-    </div>
+  <section>
+    <h2>Our Plans</h2>
+    <h3>One-Day Plan</h3>
+    <p>₹110 for 1-hour session</p>
+    <button class="plan-btn" onclick="activatePlan('day')">Activate Plan</button>
 
-    <script>
-        let remainingSessions = 0;
+    <h3>Weekly Plan</h3>
+    <p>₹770 for 7 days (+30min bonus each day)</p>
+    <button class="plan-btn" onclick="activatePlan('week')">Activate Plan</button>
+  </section>
 
-        function showSubscriptionPopup(planType) {
-            let planDescription = '';
+  <section>
+    <h2>Book a Consultation</h2>
+    <p>Want a human touch? We’re here to listen and guide you.</p>
+    <ul>
+      <li>Select your preferred plan.</li>
+      <li>Complete payment using UPI or PayPal.</li>
+      <li>Click "Activate Plan".</li>
+      <li>You’ll get your session slot automatically added.</li>
+    </ul>
+  </section>
 
-            if (planType === 'one-day') {
-                planDescription = '₹110 for 1 hour session';
-            } else if (planType === 'weekly') {
-                planDescription = '₹770 for 7 days (+30min bonus each day)';
-            }
+  <section>
+    <h2>Share Your Experience</h2>
+    <textarea id="review" placeholder="Write your review..."></textarea>
+    <button class="plan-btn" onclick="submitReview()">Submit Review</button>
+    <p id="review-msg"></p>
+  </section>
 
-            document.getElementById('popup-plan-description').innerText = planDescription;
-            document.getElementById('subscription-popup').style.display = 'flex';
-        }
+  <section>
+    <h2>About Unspoken Healer</h2>
+    <p>At Unspoken Healer, we believe no one should face struggles alone. 
+    Our consultants provide empathetic, non-judgmental support — whether it’s stress, 
+    relationships, or personal growth.</p>
+  </section>
 
-        function closePopup() {
-            document.getElementById('subscription-popup').style.display = 'none';
-        }
+  <section>
+    <h2>FAQ</h2>
+    <p><b>Q:</b> How do I start?<br><b>A:</b> Choose a plan, complete payment, and activate it.</p>
+    <p><b>Q:</b> What payment methods do you support?<br><b>A:</b> UPI and PayPal for now.</p>
+    <p><b>Q:</b> Can I upgrade my plan later?<br><b>A:</b> Yes, you can always purchase a new plan.</p>
+  </section>
 
-        function selectPlan(planType) {
-            if (remainingSessions > 0) {
-                remainingSessions -= 1;
-                document.getElementById('remaining-sessions').innerText = remainingSessions;
-            } else {
-                showSubscriptionPopup(planType);
-            }
-        }
+  <section>
+    <h2>Contact Us</h2>
+    <p>Email: support@unspokenhealer.com</p>
+  </section>
 
-        function submitReview() {
-            let reviewText = document.getElementById('review-text').value;
-            if (reviewText) {
-                alert('Thank you for your review!');
-                document.getElementById('review-text').value = '';
-            } else {
-                alert('Please write a review.');
-            }
-        }
-    </script>
+  <footer>
+    <p>© 2025 Unspoken Healer | <a href="#">Terms of Service</a> | <a href="#">Privacy Policy</a></p>
+  </footer>
 
+  <script>
+    let sessions = 0;
+
+    function login() {
+      alert("Login feature coming soon (Firebase Auth).");
+    }
+    function register() {
+      alert("Register feature coming soon (Firebase Auth).");
+    }
+    function logout() {
+      alert("Logged out!");
+    }
+
+    function checkPlan(service) {
+      if (sessions > 0) {
+        sessions--;
+        document.getElementById('sessions').textContent = sessions;
+        alert(`You have started a ${service} session.`);
+      } else {
+        alert("Subscription Required: Please activate a plan first.");
+      }
+    }
+
+    function activatePlan(plan) {
+      if (plan === 'day') {
+        sessions = 1;
+        alert("One-Day Plan activated! 1 session added.");
+      } else if (plan === 'week') {
+        sessions = 7;
+        alert("Weekly Plan activated! 7 sessions added.");
+      }
+      document.getElementById('sessions').textContent = sessions;
+    }
+
+    function submitReview() {
+      let review = document.getElementById('review').value;
+      if (review.trim() === "") {
+        alert("Please write something before submitting.");
+        return;
+      }
+      document.getElementById('review-msg').textContent = "Thank you for your feedback!";
+      document.getElementById('review').value = "";
+    }
+  </script>
 </body>
-
 </html>
