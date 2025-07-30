@@ -1,113 +1,255 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Unspoken Healer - Talk to Consultants</title>
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unspoken Healer</title>
 
-  <!-- Firebase -->
-  <script src="https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js"></script>
+    <style>
+        /* Basic styles */
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #111;
+            color: #fff;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .buttons a {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .buttons a:hover {
+            background-color: #218838;
+        }
+
+        .feature-section,
+        .plan-section,
+        .review-section {
+            margin-top: 30px;
+        }
+
+        .plan-section .plan {
+            background-color: #f8f9fa;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .plan .plan-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .plan .price {
+            font-size: 1.2rem;
+            color: #007bff;
+        }
+
+        .review-section textarea {
+            width: 100%;
+            height: 100px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .review-section button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .review-section button:hover {
+            background-color: #0056b3;
+        }
+
+        .plan-button {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+
+        .plan-button:hover {
+            background-color: #0056b3;
+        }
+
+        .subscription-popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .subscription-popup .popup-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .subscription-popup button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .subscription-popup button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+
 </head>
+
 <body>
-<header>
-  <h1>Unspoken Healer 🌌</h1>
-  <h3>We have solution for everything</h3>
-  <div class="auth-buttons">
-    <button id="loginBtn">Login</button>
-    <button id="registerBtn">Register</button>
-    <button id="logoutBtn" class="hidden">Logout</button>
-  </div>
-</header>
 
-<main>
-  <section id="statusSection" class="hidden">
-    <p id="welcomeMsg"></p>
-    <p><strong>Remaining Sessions:</strong> <span id="sessionCount">0</span></p>
-  </section>
+    <header>
+        <h1>Unspoken Healer</h1>
+        <div class="buttons">
+            <a href="#" id="login-btn">Login</a>
+            <a href="#" id="register-btn">Register</a>
+        </div>
+    </header>
 
-  <!-- Feature Access Section -->
-  <section id="features">
-    <h2>Choose Your Support</h2>
-    <p>Select a service below. If you don’t have an active plan, you’ll be asked to subscribe.</p>
-    <div class="feature-grid">
-      <button class="feature-btn" data-feature="Live Chat">💬 Live Chat with Consultant</button>
-      <button class="feature-btn" data-feature="Second Opinion">🧠 Second Opinion</button>
-      <button class="feature-btn" data-feature="Voice Chat">🎤 Voice Chat with Consultant</button>
+    <div class="container">
+
+        <h2>Remaining Sessions: <span id="remaining-sessions">0</span></h2>
+
+        <div class="feature-section">
+            <h3>Choose Your Support</h3>
+            <p>Select a service below. If you don’t have an active plan, you’ll be asked to subscribe.</p>
+
+            <button class="plan-button" onclick="showSubscriptionPopup('one-day')">One-Day Plan</button>
+            <button class="plan-button" onclick="showSubscriptionPopup('weekly')">Weekly Plan</button>
+        </div>
+
+        <div class="plan-section">
+            <h3>Our Plans</h3>
+
+            <div class="plan" id="one-day-plan">
+                <div class="plan-title">One-Day Plan</div>
+                <div class="price">₹110 for 1-hour session</div>
+                <button onclick="selectPlan('one-day')">Activate Plan</button>
+            </div>
+
+            <div class="plan" id="weekly-plan">
+                <div class="plan-title">Weekly Plan</div>
+                <div class="price">₹770 for 7 days (+30min bonus each day)</div>
+                <button onclick="selectPlan('weekly')">Activate Plan</button>
+            </div>
+        </div>
+
+        <div class="review-section">
+            <h3>Share Your Experience</h3>
+            <textarea id="review-text" placeholder="Write your review..."></textarea><br>
+            <button onclick="submitReview()">Submit Review</button>
+        </div>
+
     </div>
-  </section>
 
-  <!-- Plans -->
-  <section id="plans">
-    <h2>Our Plans</h2>
-    <div class="pricing-grid">
-      <div class="plan-card">
-        <h3>One-Day Plan</h3>
-        <p>₹110 for 1 hour session</p>
-        <a href="upi://pay?pa=paytmarlj18py8rlj@paytm&pn=UnspokenHealer&am=110" target="_blank">
-          <button>Pay with UPI</button>
-        </a>
-        <a href="https://paypal.me/AbhishekBhandari734/110" target="_blank">
-          <button>Pay with PayPal</button>
-        </a>
-        <button class="activatePlan" data-plan="day">Activate Plan</button>
-      </div>
-      <div class="plan-card">
-        <h3>Weekly Plan</h3>
-        <p>₹770 for 7 days (+30min bonus each day)</p>
-        <a href="upi://pay?pa=paytmarlj18py8rlj@paytm&pn=UnspokenHealer&am=770" target="_blank">
-          <button>Pay with UPI</button>
-        </a>
-        <a href="https://paypal.me/AbhishekBhandari734/770" target="_blank">
-          <button>Pay with PayPal</button>
-        </a>
-        <button class="activatePlan" data-plan="week">Activate Plan</button>
-      </div>
+    <!-- Subscription Popup -->
+    <div class="subscription-popup" id="subscription-popup">
+        <div class="popup-content">
+            <h3>Subscription Required</h3>
+            <p id="popup-plan-description"></p>
+            <button onclick="closePopup()">Close</button>
+        </div>
     </div>
-  </section>
 
-  <!-- Consultation Info -->
-  <section id="consultation">
-    <h2>Book a Consultation</h2>
-    <p>Want a human touch? We’re here to listen and guide you.</p>
-    <ul>
-      <li>Select your preferred plan.</li>
-      <li>Complete payment using UPI or PayPal.</li>
-      <li>Click "Activate Plan".</li>
-      <li>You’ll get your session slot automatically added.</li>
-    </ul>
-  </section>
+    <script>
+        let remainingSessions = 0;
 
-  <!-- Reviews -->
-  <section id="reviews">
-    <h2>Share Your Experience</h2>
-    <form id="reviewForm">
-      <textarea id="reviewText" placeholder="Write your review..." required></textarea>
-      <button type="submit">Submit Review</button>
-    </form>
-    <div id="reviewsList"></div>
-  </section>
+        function showSubscriptionPopup(planType) {
+            let planDescription = '';
 
-  <!-- About Section -->
-  <section id="about">
-    <h2>Why Choose Unspoken Healer?</h2>
-    <p>At Unspoken Healer, we believe no one should face struggles alone. 
-       Our consultants provide empathetic, non-judgmental support — whether 
-       it’s stress, relationships, or personal growth.</p>
-  </section>
-</main>
+            if (planType === 'one-day') {
+                planDescription = '₹110 for 1 hour session';
+            } else if (planType === 'weekly') {
+                planDescription = '₹770 for 7 days (+30min bonus each day)';
+            }
 
-<!-- Payment Popup -->
-<div id="paymentPopup" class="popup hidden">
-  <div class="popup-content">
-    <h2>Subscription Required</h2>
-    <p>You need a valid plan to use this feature.</p>
-    <button id="closePopup">Close</button>
-  </div>
-</div>
+            document.getElementById('popup-plan-description').innerText = planDescription;
+            document.getElementById('subscription-popup').style.display = 'flex';
+        }
 
-<script src="script.js" type="module"></script>
+        function closePopup() {
+            document.getElementById('subscription-popup').style.display = 'none';
+        }
+
+        function selectPlan(planType) {
+            if (remainingSessions > 0) {
+                remainingSessions -= 1;
+                document.getElementById('remaining-sessions').innerText = remainingSessions;
+            } else {
+                showSubscriptionPopup(planType);
+            }
+        }
+
+        function submitReview() {
+            let reviewText = document.getElementById('review-text').value;
+            if (reviewText) {
+                alert('Thank you for your review!');
+                document.getElementById('review-text').value = '';
+            } else {
+                alert('Please write a review.');
+            }
+        }
+    </script>
+
 </body>
+
 </html>
