@@ -15,25 +15,21 @@
     header {
       background: rgba(0, 0, 0, 0.7);
       padding: 15px;
-      text-align: center;
-      position: relative;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
-    header h1 { margin: 0; font-size: 24px; }
-    .datetime {
-      position: absolute;
-      top: 15px;
-      left: 15px;
-      font-size: 14px;
-      color: #00ffcc;
-    }
+    header h1 { margin: 0; font-size: 22px; }
+    .datetime { font-size: 13px; color: #00ffcc; }
+    .auth-buttons { display: flex; gap: 8px; }
     .btn {
       background: #00cc66;
       color: white;
       padding: 8px 14px;
-      margin: 5px;
       border: none;
       border-radius: 6px;
       cursor: pointer;
+      font-size: 14px;
     }
     .btn:hover { background: #00994d; }
     .card {
@@ -69,17 +65,44 @@
     }
     footer a { color: #00ccff; text-decoration: none; margin: 0 5px; }
     footer a:hover { text-decoration: underline; }
+    /* Popup styles */
+    .popup {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.7);
+    }
+    .popup-content {
+      background: #111;
+      margin: 8% auto;
+      padding: 20px;
+      width: 90%;
+      max-width: 500px;
+      border-radius: 10px;
+      text-align: center;
+      color: white;
+    }
+    .popup h2 { margin-top: 0; }
+    .close-btn {
+      float: right;
+      cursor: pointer;
+      font-size: 18px;
+    }
   </style>
 </head>
 <body>
   <header>
-    <div class="datetime" id="datetime"></div>
-    <h1>Unspoken Healer 🌌</h1>
     <div>
-      <button class="btn">Login</button>
-      <button class="btn">Register</button>
-      <button class="btn">Logout</button>
-      <button class="btn">Admin</button>
+      <h1>Unspoken Healer 🌌</h1>
+      <div class="datetime" id="datetime"></div>
+    </div>
+    <div class="auth-buttons">
+      <button id="loginBtn" class="btn" onclick="login()">Login</button>
+      <button id="registerBtn" class="btn" onclick="register()">Register</button>
+      <button id="logoutBtn" class="btn" onclick="logout()" style="display:none;">Logout</button>
+      <button class="btn" onclick="openAdmin()">Admin</button>
     </div>
   </header>
 
@@ -90,8 +113,8 @@
 
   <div class="card">
     <h2 style="color:#00ff99;">Interactive Support</h2>
-    <button class="btn" onclick="startChat('chat')">Chat with Consultant</button>
-    <button class="btn" onclick="startChat('voice')">Voice Chat with Consultant</button>
+    <button class="btn" onclick="attemptSupport('chat')">Chat with Consultant</button>
+    <button class="btn" onclick="attemptSupport('voice')">Voice Chat with Consultant</button>
     <div class="chatbox" id="chatbox">Please choose an option above to begin.</div>
     <input type="text" id="usermsg" placeholder="Type your message...">
     <button class="btn" onclick="sendMessage()">Send</button>
@@ -121,13 +144,6 @@
   </div>
 
   <div class="card">
-    <h2 style="color:#00ff99;">FAQ</h2>
-    <p><strong>Q:</strong> How do I start a session?<br><strong>A:</strong> Choose a plan, complete payment, and your sessions will activate automatically.</p>
-    <p><strong>Q:</strong> Can I choose between chat and voice support?<br><strong>A:</strong> Yes! You can pick either chat or voice call as per your comfort.</p>
-    <p><strong>Q:</strong> How secure is my data?<br><strong>A:</strong> Your privacy is our priority. We use encrypted systems to protect all conversations.</p>
-  </div>
-
-  <div class="card">
     <h2 style="color:#00ff99;">Share Your Experience</h2>
     <textarea id="review" placeholder="Write your review..."></textarea>
     <button class="btn" onclick="submitReview()">Submit Review</button>
@@ -140,7 +156,35 @@
     <a href="#">Contact Us</a>
   </footer>
 
+  <!-- General Popup -->
+  <div class="popup" id="popup">
+    <div class="popup-content">
+      <span class="close-btn" onclick="closePopup()">✖</span>
+      <h2 id="popupTitle">Login Required</h2>
+      <p id="popupMessage">Please log in to continue.</p>
+      <div id="popupActions"></div>
+    </div>
+  </div>
+
+  <!-- Admin Dashboard Popup -->
+  <div class="popup" id="adminPopup">
+    <div class="popup-content">
+      <span class="close-btn" onclick="closeAdmin()">✖</span>
+      <h2>Admin Dashboard</h2>
+      <p>Here you can view and manage:</p>
+      <ul style="text-align:left;">
+        <li>👤 Active Users</li>
+        <li>💬 Ongoing Chats</li>
+        <li>📊 Subscription Plans</li>
+        <li>📝 User Feedback</li>
+      </ul>
+    </div>
+  </div>
+
   <script>
+    let loggedIn = false;
+    let hasPlan = false;
+
     // Date & Time updater
     function updateDateTime() {
       const now = new Date();
@@ -154,7 +198,34 @@
     setInterval(updateDateTime, 1000);
     updateDateTime();
 
-    // Chat simulation
+    // Popup handling
+    function showPopup(title, message, actionsHTML) {
+      document.getElementById('popupTitle').innerText = title;
+      document.getElementById('popupMessage').innerText = message;
+      document.getElementById('popupActions').innerHTML = actionsHTML;
+      document.getElementById('popup').style.display = 'block';
+    }
+    function closePopup() { document.getElementById('popup').style.display = 'none'; }
+
+    // Admin popup
+    function openAdmin() { document.getElementById('adminPopup').style.display = 'block'; }
+    function closeAdmin() { document.getElementById('adminPopup').style.display = 'none'; }
+
+    // Support logic
+    function attemptSupport(type) {
+      if(!loggedIn) {
+        showPopup("Login Required", "Please log in to continue.", 
+          '<button class="btn" onclick="login()">Login</button> <button class="btn" onclick="register()">Register</button>');
+      } else if(!hasPlan) {
+        showPopup("No Active Plan", "You need an active plan to start.", 
+          '<button class="btn" onclick="activatePlan(110)">Buy One-Day ₹110</button><br><br>' +
+          '<button class="btn" onclick="activatePlan(770)">Buy Weekly ₹770</button>');
+      } else {
+        startChat(type);
+        closePopup();
+      }
+    }
+
     function startChat(type) {
       const box = document.getElementById('chatbox');
       if(type === 'chat') {
@@ -163,6 +234,7 @@
         box.innerHTML = "Preparing Voice Call... Please wait ⏳";
       }
     }
+
     function sendMessage() {
       const msg = document.getElementById('usermsg').value;
       if(msg.trim()) {
@@ -172,14 +244,45 @@
       }
     }
 
-    // Payment choice
+    // Payment simulation
     function choosePayment(amount) {
-      const choice = confirm("Pay with UPI? Click Cancel for PayPal.");
-      if(choice) {
-        window.location.href = "upi://pay?pa=paytmqr1j18py8r1j@paytm&pn=UnspokenHealer&am=" + amount;
-      } else {
-        window.location.href = "https://www.paypal.me/AbhishekBhandari734/" + amount;
-      }
+      showPopup("Choose Payment", "Select your payment method:",
+        '<a class="btn" href="upi://pay?pa=paytmqr1j18py8r1j@paytm&pn=UnspokenHealer&am='+amount+'">Pay via UPI</a><br><br>'+
+        '<a class="btn" href="https://www.paypal.me/AbhishekBhandari734/'+amount+'" target="_blank">Pay via PayPal</a>'
+      );
+    }
+    function activatePlan(amount) {
+      hasPlan = true;
+      closePopup();
+      document.getElementById('sessions').innerText = amount == 110 ? "1" : "7";
+      alert("Plan activated successfully!");
+    }
+
+    // Auth simulation
+    function login() {
+      loggedIn = true;
+      document.getElementById('loginBtn').style.display = 'none';
+      document.getElementById('registerBtn').style.display = 'none';
+      document.getElementById('logoutBtn').style.display = 'inline-block';
+      alert("Logged in successfully!");
+      closePopup();
+    }
+    function register() {
+      loggedIn = true;
+      document.getElementById('loginBtn').style.display = 'none';
+      document.getElementById('registerBtn').style.display = 'none';
+      document.getElementById('logoutBtn').style.display = 'inline-block';
+      alert("Registered & logged in successfully!");
+      closePopup();
+    }
+    function logout() {
+      loggedIn = false;
+      hasPlan = false;
+      document.getElementById('loginBtn').style.display = 'inline-block';
+      document.getElementById('registerBtn').style.display = 'inline-block';
+      document.getElementById('logoutBtn').style.display = 'none';
+      document.getElementById('sessions').innerText = "0";
+      alert("Logged out.");
     }
 
     // Review submit
