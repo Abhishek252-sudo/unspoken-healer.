@@ -6,284 +6,224 @@
   <title>Unspoken Healer 🌌</title>
   <style>
     body {
-      margin: 0;
-      font-family: "Segoe UI", Arial, sans-serif;
-      background: url('https://images.unsplash.com/photo-1501594907352-04cda38ebc29?auto=format&fit=crop&w=1950&q=80') no-repeat center center fixed;
+      font-family: Arial, sans-serif;
+      background: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1650&q=80') no-repeat center center fixed;
       background-size: cover;
-      color: #f5f5f5;
+      margin: 0;
+      padding: 0;
+      color: white;
     }
-    body::before {
-      content: "";
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.65);
-      z-index: -1;
+    .overlay {
+      background: rgba(0, 0, 0, 0.6);
+      min-height: 100vh;
+      padding: 20px;
     }
     header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 20px;
-      background: rgba(0,0,0,0.7);
-      box-shadow: 0 4px 20px rgba(0,242,254,0.5);
+      padding: 10px 20px;
     }
     header h1 {
-      font-size: 2em;
-      color: #00f2fe;
-      text-shadow: 0 0 15px #00f2fe;
+      margin: 0;
     }
-    .tagline { color: #ccc; font-size: 0.9em; }
-    #currentTime { font-weight: bold; color: #ffdd57; }
-    .auth-buttons button {
-      margin-left: 10px;
-      background: linear-gradient(45deg, #00f2fe, #4facfe);
-      color: #000;
+    .time {
+      color: #00ffcc;
+      font-size: 14px;
+    }
+    button {
+      background: #00cc66;
       border: none;
-      padding: 8px 15px;
-      border-radius: 8px;
+      padding: 8px 14px;
+      margin: 5px;
+      border-radius: 6px;
+      color: white;
       cursor: pointer;
-      font-weight: bold;
-      box-shadow: 0 0 10px rgba(0,242,254,0.6);
     }
-    section { padding: 40px 20px; max-width: 1000px; margin: auto; }
-    h2 { text-align: center; color: #00f2fe; margin-bottom: 20px; }
+    button:hover {
+      background: #00994d;
+    }
     .card {
-      background: rgba(255,255,255,0.08);
-      backdrop-filter: blur(20px);
+      background: rgba(0, 0, 0, 0.7);
+      border-radius: 10px;
       padding: 20px;
-      border-radius: 15px;
-      box-shadow: 0 6px 25px rgba(0,0,0,0.8);
-      margin-bottom: 20px;
+      margin: 15px 0;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
     }
-    /* Chat */
-    #chatWindow {
-      height: 280px;
+    .chatbox {
+      display: none;
+      flex-direction: column;
+    }
+    .chat-window {
+      background: #111;
+      height: 200px;
+      border-radius: 8px;
+      padding: 10px;
       overflow-y: auto;
-      background: rgba(0,0,0,0.7);
-      border-radius: 10px;
-      padding: 15px;
-      margin-bottom: 15px;
-      color: #fff;
+      margin-bottom: 10px;
     }
-    #controls { display: flex; }
-    #controls input {
-      flex: 1; padding: 12px;
-      border-radius: 10px; border: none;
-      margin-right: 8px;
-      background: rgba(255,255,255,0.15);
-      color: #fff;
+    .chat-input {
+      display: flex;
     }
-    #controls button {
-      padding: 12px 18px;
-      background: #00f2fe;
+    .chat-input input {
+      flex: 1;
+      padding: 10px;
+      border-radius: 6px;
       border: none;
-      border-radius: 10px;
-      font-weight: bold;
-      cursor: pointer;
-      color: #000;
+      margin-right: 5px;
     }
-    .chat-footer {
-      display: flex; justify-content: space-between; align-items: center;
-      font-size: 0.9em;
-    }
-    #callBtn { background: #ffca28; color: #000; padding: 8px 15px; border-radius: 8px; }
-    /* Popup */
-    .popup {
-      position: fixed; top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.9);
-      display: flex; align-items: center; justify-content: center;
-      z-index: 1000;
-    }
-    .popup-content {
-      background: #222; padding: 20px;
-      border-radius: 12px; max-width: 400px;
-      text-align: center; color: #fff;
-      box-shadow: 0 0 20px rgba(0,242,254,0.7);
-    }
-    .hidden { display: none; }
     footer {
-      text-align: center; padding: 15px;
-      background: rgba(0,0,0,0.8);
-      color: #ccc;
+      text-align: center;
+      margin-top: 20px;
+      font-size: 12px;
     }
-    details { margin: 10px 0; }
-    summary { font-weight: bold; cursor: pointer; }
+    a { color: #00ccff; }
   </style>
 </head>
 <body>
-  <header>
-    <div>
-      <h1>🌌 Unspoken Healer</h1>
-      <p class="tagline">We Have Solutions for Everything</p>
+  <div class="overlay">
+    <header>
+      <div>
+        <span class="time" id="timeDisplay"></span>
+      </div>
+      <h1>Unspoken Healer 🌌</h1>
+      <div>
+        <button onclick="login()">Login</button>
+        <button onclick="register()">Register</button>
+        <button onclick="logout()">Logout</button>
+      </div>
+    </header>
+
+    <div class="card">
+      <h2>Remaining Sessions: <span id="sessions">0</span></h2>
+      <p>Select a support service below. If you don’t have an active plan, you’ll be asked to subscribe.</p>
     </div>
-    <div>
-      <p id="currentTime"></p>
-      <div class="auth-buttons">
-        <button id="loginBtn">Login</button>
-        <button id="registerBtn">Register</button>
-        <button id="logoutBtn" class="hidden">Logout</button>
+
+    <div class="card">
+      <h2>Interactive Support</h2>
+      <button onclick="startSupport()">Start</button>
+      <div class="chatbox" id="chatbox">
+        <div class="chat-window" id="chatWindow">Choose an option to begin.</div>
+        <div>
+          <button onclick="startChat()">💬 Chat with Consultant</button>
+          <button onclick="startVoice()">📞 Voice Chat with Consultant</button>
+        </div>
+        <div class="chat-input">
+          <input type="text" id="chatMessage" placeholder="Type your message...">
+          <button onclick="sendMessage()">Send</button>
+        </div>
+        <button id="callBtn" style="display:none;">Call Consultant (Wait time: 2 mins)</button>
       </div>
     </div>
-  </header>
 
-  <!-- Terms Popup -->
-  <div id="termsPopup" class="popup">
-    <div class="popup-content">
-      <h2>Before We Begin</h2>
-      <p>Please agree to our 
-        <a href="https://abhishek252-sudo.github.io/unspoken-healer/" target="_blank">Terms & Services</a>.
-      </p>
-      <label><input type="checkbox" id="agreeTerms"> I Agree</label><br><br>
-      <button id="continueBtn">Continue</button>
-    </div>
-  </div>
+    <div class="card">
+      <h2>Our Plans</h2>
+      <h3>One-Day Plan</h3>
+      <p>₹110 for 1-hour session</p>
+      <button onclick="activatePlan('one-day')">Activate Plan</button>
 
-  <!-- Chat Section -->
-  <section>
-    <h2>Interactive Support</h2>
-    <div class="card">
-      <button id="chatConsultBtn">💬 Chat with Consultant</button>
-      <button id="voiceConsultBtn">🎤 Voice Chat with Consultant</button>
-      <div id="chatBox" class="hidden">
-        <h3>Private Chat</h3>
-        <div id="chatWindow"></div>
-        <div id="controls">
-          <input type="text" id="userInput" placeholder="Type your message..." disabled>
-          <button id="sendBtn" disabled>Send</button>
-        </div>
-        <div class="chat-footer">
-          <span id="chatCounter">5 free chats remaining</span>
-          <button id="callBtn">📞 Start Call</button>
-          <span id="waitTime">Wait: 2 mins</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Plans -->
-  <section>
-    <h2>Activate a Plan</h2>
-    <div class="card">
-      <h3>One Day Plan</h3>
-      <p>💡 1 Hour Consultation</p>
-      <p><strong>₹110</strong></p>
-      <a href="https://paypal.me/AbhishekBhandari734" target="_blank"><button>Pay with PayPal</button></a>
-      <a href="upi://pay?pa=paytmqr1j18py8r1j@paytm&pn=UnspokenHealer&am=110" target="_blank"><button>Pay with Paytm</button></a>
-    </div>
-    <div class="card">
       <h3>Weekly Plan</h3>
-      <p>🗓 30 Minutes Extra Daily</p>
-      <p><strong>₹770</strong></p>
-      <a href="https://paypal.me/AbhishekBhandari734" target="_blank"><button>Pay with PayPal</button></a>
-      <a href="upi://pay?pa=paytmqr1j18py8r1j@paytm&pn=UnspokenHealer&am=770" target="_blank"><button>Pay with Paytm</button></a>
+      <p>₹770 for 7 days (+30min bonus each day)</p>
+      <button onclick="activatePlan('weekly')">Activate Plan</button>
     </div>
-  </section>
 
-  <!-- About Us -->
-  <section>
-    <h2>About Us</h2>
     <div class="card">
-      <p>Unspoken Healer was built with a simple mission: to provide a safe space for anyone dealing with stress, mental health issues, or personal struggles. We believe no one should feel alone in their journey.</p>
+      <h2>Why Mental Health Matters</h2>
+      <p>Your mental health is just as important as your physical health. At Unspoken Healer, we believe that taking care of your mind is the first step toward a happier life. 
+      Ignoring mental health is like ignoring a wound — it only gets worse. 
+      Whether you’re struggling with stress, anxiety, or just need someone to talk to, we’re here to support you every step of the way.</p>
     </div>
-  </section>
 
-  <!-- Mental Health -->
-  <section>
-    <h2>Why Mental Health Matters</h2>
     <div class="card">
-      <p>Your mind deserves as much care as your body. Many people hide their struggles, but silence only deepens pain. Talking with a consultant can lighten your burden and guide you towards healing.</p>
-      <blockquote>"Healing begins the moment you decide to speak out."</blockquote>
+      <h2>About Us</h2>
+      <p>Unspoken Healer was founded with one vision: to make emotional and mental support accessible to everyone. 
+      We know that life’s struggles can feel overwhelming, and our mission is to ensure you never have to face them alone. 
+      Whether through chat or voice support, our consultants are here to listen, understand, and guide you without judgment.</p>
     </div>
-  </section>
 
-  <!-- FAQ -->
-  <section>
-    <h2>FAQ</h2>
     <div class="card">
-      <details>
-        <summary>Is my conversation private?</summary>
-        <p>Yes. All chats and consultations are 100% confidential.</p>
-      </details>
-      <details>
-        <summary>How do I pay?</summary>
-        <p>You can pay via UPI or PayPal. Just tap on the plan you want to activate.</p>
-      </details>
-      <details>
-        <summary>Do I need to register?</summary>
-        <p>Yes, registration ensures secure and personalized support.</p>
-      </details>
+      <h2>FAQ</h2>
+      <p><strong>Q:</strong> How do I start a session?<br>
+      <strong>A:</strong> Choose a plan, complete payment, and then tap "Start" under Interactive Support.</p>
+      <p><strong>Q:</strong> Can I use UPI instead of PayPal?<br>
+      <strong>A:</strong> Yes! We support both UPI and PayPal for your convenience.</p>
+      <p><strong>Q:</strong> Will my sessions carry over if unused?<br>
+      <strong>A:</strong> Yes, as long as your plan is active.</p>
     </div>
-  </section>
 
-  <!-- Contact Us -->
-  <section>
-    <h2>Contact Us</h2>
     <div class="card">
-      <p>Email: <a href="mailto:infoabhishekbhandari@gmail.com">infoabhishekbhandari@gmail.com</a></p>
-      <p>Available 24/7 to support you.</p>
+      <h2>Contact Us</h2>
+      <p>Email: support@unspokenhealer.com</p>
+      <p>Phone: +91-9876543210</p>
     </div>
-  </section>
 
-  <footer>
-    <p>© 2025 Unspoken Healer. All Rights Reserved.</p>
-  </footer>
+    <div class="card">
+      <h2>Share Your Experience</h2>
+      <textarea id="review" rows="4" style="width:100%;" placeholder="Write your review..."></textarea>
+      <button onclick="submitReview()">Submit Review</button>
+    </div>
+
+    <footer>
+      © 2025 Unspoken Healer | <a href="#">Terms of Service</a> | <a href="#">Privacy Policy</a>
+    </footer>
+  </div>
 
   <script>
     // Time updater
     function updateTime() {
       const now = new Date();
       let hours = now.getHours();
-      let minutes = now.getMinutes();
+      const minutes = now.getMinutes().toString().padStart(2,'0');
       const ampm = hours >= 12 ? 'PM' : 'AM';
       hours = hours % 12 || 12;
-      minutes = minutes < 10 ? '0'+minutes : minutes;
-      document.getElementById('currentTime').innerText = hours + ":" + minutes + " " + ampm;
+      document.getElementById("timeDisplay").textContent = 
+        `${now.toLocaleDateString()} ${hours}:${minutes} ${ampm}`;
     }
-    setInterval(updateTime, 60000); updateTime();
+    setInterval(updateTime, 60000);
+    updateTime();
 
-    // Terms Popup
-    document.getElementById('continueBtn').onclick = () => {
-      if(document.getElementById('agreeTerms').checked) {
-        document.getElementById('termsPopup').classList.add('hidden');
-      } else alert("Please agree to continue.");
-    };
+    // Session handling
+    let sessions = 0;
+    function activatePlan(plan) {
+      if (plan === 'one-day') sessions += 1;
+      if (plan === 'weekly') sessions += 7;
+      document.getElementById('sessions').textContent = sessions;
+      const method = confirm("Pay with OK=UPI, Cancel=PayPal");
+      if (method) {
+        window.location.href = "upi://pay?pa=paytmqr1j18py8r1j@paytm&pn=UnspokenHealer&am=110&cu=INR";
+      } else {
+        window.location.href = "https://www.paypal.me/AbhishekBhandari734";
+      }
+    }
 
-    // Chat
-    const chatBox = document.getElementById('chatBox');
-    const chatWindow = document.getElementById('chatWindow');
-    let freeChats = 5;
-    document.getElementById('chatConsultBtn').onclick = () => {
-      chatBox.classList.remove('hidden');
-      document.getElementById('userInput').disabled = false;
-      document.getElementById('sendBtn').disabled = false;
-      chatWindow.innerHTML += "<p><b>System:</b> Connected to consultant.</p>";
-    };
-    document.getElementById('voiceConsultBtn').onclick = () => {
-      chatBox.classList.remove('hidden');
-      chatWindow.innerHTML += "<p><b>System:</b> Voice session requested. Wait time: 2 mins.</p>";
-    };
-    document.getElementById('sendBtn').onclick = () => {
-      if (freeChats > 0) {
-        const msg = document.getElementById('userInput').value.trim();
-        if (msg) {
-          chatWindow.innerHTML += `<p><b>You:</b> ${msg}</p>`;
-          freeChats--;
-          document.getElementById('chatCounter').innerText = freeChats + " free chats remaining";
-          if (freeChats === 0) {
-            chatWindow.innerHTML += "<p><b>System:</b> Free chats over. Please activate a plan.</p>";
-          }
-          document.getElementById('userInput').value = "";
-          chatWindow.scrollTop = chatWindow.scrollHeight;
-        }
-      } else alert("Limit reached! Activate a plan.");
-    };
+    // Interactive Support
+    function startSupport() {
+      document.getElementById("chatbox").style.display = "flex";
+    }
+    function startChat() {
+      document.getElementById("chatWindow").innerHTML += "<p><em>Started Chat with Consultant</em></p>";
+    }
+    function startVoice() {
+      document.getElementById("callBtn").style.display = "block";
+      document.getElementById("chatWindow").innerHTML += "<p><em>Preparing voice session... Please wait.</em></p>";
+    }
+    function sendMessage() {
+      const msg = document.getElementById("chatMessage").value;
+      if (!msg) return;
+      const chatWindow = document.getElementById("chatWindow");
+      chatWindow.innerHTML += "<p><strong>You:</strong> " + msg + "</p>";
+      document.getElementById("chatMessage").value = "";
+      chatWindow.scrollTop = chatWindow.scrollHeight;
+    }
+    function submitReview() {
+      alert("Thank you for your review!");
+      document.getElementById("review").value = "";
+    }
 
-    // Auth placeholders
-    document.getElementById('loginBtn').onclick = () => alert("Login feature coming soon.");
-    document.getElementById('registerBtn').onclick = () => alert("Register feature coming soon.");
-    document.getElementById('logoutBtn').onclick = () => alert("Logout feature coming soon.");
+    // Dummy auth
+    function login(){ alert("Login feature coming soon (Firebase auth)."); }
+    function register(){ alert("Register feature coming soon."); }
+    function logout(){ alert("You have logged out."); }
   </script>
 </body>
 </html>
