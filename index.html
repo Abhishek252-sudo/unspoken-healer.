@@ -18,10 +18,26 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      position: relative;
     }
-    header h1 { margin: 0; font-size: 22px; }
-    .datetime { font-size: 13px; color: #00ffcc; }
-    .auth-buttons { display: flex; gap: 8px; }
+    header h1 { 
+      margin: 0; 
+      font-size: 22px; 
+      text-align: center;
+      flex: 1;
+    }
+    .datetime { 
+      font-size: 13px; 
+      color: #00ffcc; 
+      position: absolute; 
+      left: 15px; 
+    }
+    .auth-buttons { 
+      position: absolute; 
+      right: 15px; 
+      display: flex; 
+      gap: 8px; 
+    }
     .btn {
       background: #00cc66;
       color: white;
@@ -42,7 +58,7 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.5);
     }
     .chatbox {
-      background: black;
+      background: rgba(20,20,20,0.85);
       padding: 10px;
       border-radius: 8px;
       height: 200px;
@@ -90,19 +106,39 @@
       cursor: pointer;
       font-size: 18px;
     }
+    /* Draggable Admin Panel */
+    #adminPanel {
+      width: 250px;
+      background: rgba(0,0,0,0.9);
+      color: white;
+      position: fixed;
+      top: 50px;
+      left: 20px;
+      border-radius: 12px;
+      padding: 15px;
+      z-index: 2000;
+      display: none;
+      cursor: move;
+    }
+    #adminHandle {
+      background: #00cc66;
+      padding: 8px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: inline-block;
+      margin-top: 5px;
+    }
   </style>
 </head>
 <body>
   <header>
-    <div>
-      <h1>Unspoken Healer 🌌</h1>
-      <div class="datetime" id="datetime"></div>
-    </div>
+    <div class="datetime" id="datetime"></div>
+    <h1>Unspoken Healer 🌌</h1>
     <div class="auth-buttons">
       <button id="loginBtn" class="btn" onclick="login()">Login</button>
       <button id="registerBtn" class="btn" onclick="register()">Register</button>
       <button id="logoutBtn" class="btn" onclick="logout()" style="display:none;">Logout</button>
-      <button class="btn" onclick="openAdmin()">Admin</button>
+      <div id="adminHandle" onclick="toggleAdmin()">Admin</div>
     </div>
   </header>
 
@@ -126,7 +162,6 @@
     <h3>One-Day Plan</h3>
     <p>₹110 for 1-hour session</p>
     <button class="btn" onclick="choosePayment('110')">Activate Plan</button>
-
     <h3>Weekly Plan</h3>
     <p>₹770 for 7 days (+30min bonus each day)</p>
     <button class="btn" onclick="choosePayment('770')">Activate Plan</button>
@@ -134,7 +169,7 @@
 
   <div class="card">
     <h2 style="color:#00ff99;">Why Mental Health Matters</h2>
-    <p>Your mental health is just as important as your physical health. At Unspoken Healer, we believe that taking care of your mind is the first step toward a happier life. Imagine waking up with a lighter heart and a calmer mind. 🌱</p>
+    <p>Your mental health is just as important as your physical health. At Unspoken Healer, we believe that taking care of your mind is the first step toward a happier life. 🌱</p>
     <p>Whether you’re struggling with stress, anxiety, or loneliness, we’re here to listen and guide you every step of the way.</p>
   </div>
 
@@ -166,39 +201,34 @@
     </div>
   </div>
 
-  <!-- Admin Dashboard Popup -->
-  <div class="popup" id="adminPopup">
-    <div class="popup-content">
-      <span class="close-btn" onclick="closeAdmin()">✖</span>
-      <h2>Admin Dashboard</h2>
-      <p>Here you can view and manage:</p>
-      <ul style="text-align:left;">
-        <li>👤 Active Users</li>
-        <li>💬 Ongoing Chats</li>
-        <li>📊 Subscription Plans</li>
-        <li>📝 User Feedback</li>
-      </ul>
-    </div>
+  <!-- Admin Panel -->
+  <div id="adminPanel">
+    <h2>Admin Dashboard</h2>
+    <p>Here you can view and manage:</p>
+    <ul>
+      <li>👤 Active Users</li>
+      <li>💬 Ongoing Chats</li>
+      <li>📊 Subscription Plans</li>
+      <li>📝 User Feedback</li>
+    </ul>
   </div>
 
   <script>
     let loggedIn = false;
     let hasPlan = false;
 
-    // Date & Time updater
+    // Date & Time
     function updateDateTime() {
       const now = new Date();
       let hours = now.getHours();
       const minutes = String(now.getMinutes()).padStart(2,'0');
       const ampm = hours >= 12 ? 'PM' : 'AM';
       hours = hours % 12 || 12;
-      const formatted = now.toDateString() + " " + hours + ":" + minutes + " " + ampm;
-      document.getElementById('datetime').innerText = formatted;
+      document.getElementById('datetime').innerText = now.toDateString() + " " + hours + ":" + minutes + " " + ampm;
     }
-    setInterval(updateDateTime, 1000);
-    updateDateTime();
+    setInterval(updateDateTime, 1000); updateDateTime();
 
-    // Popup handling
+    // Popup
     function showPopup(title, message, actionsHTML) {
       document.getElementById('popupTitle').innerText = title;
       document.getElementById('popupMessage').innerText = message;
@@ -207,9 +237,38 @@
     }
     function closePopup() { document.getElementById('popup').style.display = 'none'; }
 
-    // Admin popup
-    function openAdmin() { document.getElementById('adminPopup').style.display = 'block'; }
-    function closeAdmin() { document.getElementById('adminPopup').style.display = 'none'; }
+    // Admin panel toggle
+    function toggleAdmin() {
+      const panel = document.getElementById('adminPanel');
+      panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
+    }
+
+    // Make admin panel draggable
+    dragElement(document.getElementById("adminPanel"));
+    function dragElement(elmnt) {
+      let pos1=0,pos2=0,pos3=0,pos4=0;
+      elmnt.onmousedown = dragMouseDown;
+      function dragMouseDown(e) {
+        e.preventDefault();
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        document.onmouseup = closeDragElement;
+        document.onmousemove = elementDrag;
+      }
+      function elementDrag(e) {
+        e.preventDefault();
+        pos1 = pos3 - e.clientX;
+        pos2 = pos4 - e.clientY;
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+        elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+      }
+      function closeDragElement() {
+        document.onmouseup = null;
+        document.onmousemove = null;
+      }
+    }
 
     // Support logic
     function attemptSupport(type) {
@@ -228,11 +287,7 @@
 
     function startChat(type) {
       const box = document.getElementById('chatbox');
-      if(type === 'chat') {
-        box.innerHTML = "Started Chat with Consultant ✅";
-      } else {
-        box.innerHTML = "Preparing Voice Call... Please wait ⏳";
-      }
+      box.innerHTML = type === 'chat' ? "Started Chat with Consultant ✅" : "Preparing Voice Call... Please wait ⏳";
     }
 
     function sendMessage() {
@@ -244,7 +299,7 @@
       }
     }
 
-    // Payment simulation
+    // Payment
     function choosePayment(amount) {
       showPopup("Choose Payment", "Select your payment method:",
         '<a class="btn" href="upi://pay?pa=paytmqr1j18py8r1j@paytm&pn=UnspokenHealer&am='+amount+'">Pay via UPI</a><br><br>'+
@@ -258,7 +313,7 @@
       alert("Plan activated successfully!");
     }
 
-    // Auth simulation
+    // Auth
     function login() {
       loggedIn = true;
       document.getElementById('loginBtn').style.display = 'none';
@@ -285,7 +340,7 @@
       alert("Logged out.");
     }
 
-    // Review submit
+    // Review
     function submitReview() {
       const review = document.getElementById('review').value;
       if(review.trim()) {
