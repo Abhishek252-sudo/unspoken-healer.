@@ -1,107 +1,121 @@
-// script.js
-let agreed = false;
-let freeMessages = 5;
+// Firebase Config
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
-const chatBox = document.getElementById("chat");
-const input = document.getElementById("userInput");
-const sendBtn = document.getElementById("sendBtn");
-const freeCountEl = document.getElementById("freeCount");
+const firebaseConfig = {
+  apiKey: "AIzaSyDpSDZydyYmVv_cB_xErTL_KiKx0l11dEM",
+  authDomain: "unspokenhealer-f626a.firebaseapp.com",
+  projectId: "unspokenhealer-f626a",
+  storageBucket: "unspokenhealer-f626a.firebasestorage.app",
+  messagingSenderId: "1009119300737",
+  appId: "1:1009119300737:web:1ae60b6caf0c7389fc5180"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
 const loginBtn = document.getElementById("loginBtn");
 const registerBtn = document.getElementById("registerBtn");
 const logoutBtn = document.getElementById("logoutBtn");
-const termsPopup = document.getElementById("termsPopup");
-const continueBtn = document.getElementById("continueBtn");
-const agreeTerms = document.getElementById("agreeTerms");
-const subscribePopup = document.getElementById("subscribePopup");
-const closeSubscribe = document.getElementById("closeSubscribe");
+const statusSection = document.getElementById("statusSection");
+const welcomeMsg = document.getElementById("welcomeMsg");
+const sessionCount = document.getElementById("sessionCount");
 
-freeCountEl.textContent = freeMessages;
+const provider = new GoogleAuthProvider();
 
-// Append messages
-function appendMessage(sender, message) {
-  const msg = document.createElement("p");
-  msg.innerHTML = `<strong>${sender}:</strong> ${message}`;
-  chatBox.appendChild(msg);
-  chatBox.scrollTop = chatBox.scrollHeight;
-}
-
-// AI Response using OpenAI API
-async function getAIResponse(message) {
+// Login/Register
+loginBtn.addEventListener("click", async () => {
   try {
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer YOUR_OPENAI_API_KEY" // replace with real key
-      },
-      body: JSON.stringify({
-        model: "gpt-4o-mini",
-        messages: [{ role: "user", content: message }]
-      })
-    });
-
-    const data = await response.json();
-    return data.choices?.[0]?.message?.content || "Sorry, I didn’t understand that.";
-  } catch (error) {
-    return "⚠️ Network error. Please try again.";
+    await signInWithPopup(auth, provider);
+  } catch (err) {
+    alert("Login failed: " + err.message);
   }
-}
-
-// Send message
-sendBtn.addEventListener("click", async () => {
-  if (!agreed) {
-    alert("Please agree to the terms first.");
-    return;
+});
+registerBtn.addEventListener("click", async () => {
+  try {
+    await signInWithPopup(auth, provider);
+  } catch (err) {
+    alert("Register failed: " + err.message);
   }
-  if (freeMessages <= 0) {
-    subscribePopup.classList.remove("hidden");
-    return;
-  }
-
-  const userMessage = input.value.trim();
-  if (!userMessage) return;
-
-  appendMessage("You", userMessage);
-  input.value = "";
-
-  const reply = await getAIResponse(userMessage);
-  appendMessage("Unspoken Healer", reply);
-
-  freeMessages--;
-  freeCountEl.textContent = freeMessages;
+});
+logoutBtn.addEventListener("click", async () => {
+  await signOut(auth);
 });
 
-// Allow pressing Enter to send
-input.addEventListener("keypress", (e) => {
-  if (e.key === "Enter") sendBtn.click();
-});
+// Track auth state
+onAuthStateChanged(auth, async (user) => {
+  if (user) {
+    welcomeMsg.textContent = `Welcome, ${user.displayName || "User"}!`;
+    statusSection.classList.remove("hidden");
+    loginBtn.classList.add("hidden");
+    registerBtn.classList.add("hidden");
+    logoutBtn.classList.remove("hidden");
 
-// Handle Terms Popup
-continueBtn.addEventListener("click", () => {
-  if (!agreeTerms.checked) {
-    alert("Please agree to the terms first.");
-    return;
+    // Load session count
+    const userRef = doc(db, "users", user.uid);
+    const snap = await getDoc(userRef);
+    if (snap.exists()) {
+      sessionCount.textContent = snap.data().sessions;
+    } else {
+      await setDoc(userRef, { sessions: 0 });
+      sessionCount.textContent = 0;
+    }
+  } else {
+    statusSection.classList.add("hidden");
+    loginBtn.classList.remove("hidden");
+    registerBtn.classList.remove("hidden");
+    logoutBtn.classList.add("hidden");
   }
-  agreed = true;
-  termsPopup.classList.add("hidden");
-  input.disabled = false;
-  sendBtn.disabled = false;
 });
 
-// Handle Subscribe Popup
-if (closeSubscribe) {
-  closeSubscribe.addEventListener("click", () => {
-    subscribePopup.classList.add("hidden");
+// Activate Plan
+document.querySelectorAll(".activatePlan").forEach(btn => {
+  btn.addEventListener("click", async () => {
+    const plan = btn.dataset.plan;
+    const user = auth.currentUser;
+    if (!user) {
+      alert("Please login first.");
+      return;
+    }
+    const userRef = doc(db, "users", user.uid);
+    let sessions = plan === "day" ? 3 : 21;
+    await setDoc(userRef, { sessions });
+    sessionCount.textContent = sessions;
+    alert(`Your ${plan} plan has been activated!`);
   });
-}
+});
 
-// Auth buttons (for now just placeholders)
-loginBtn.addEventListener("click", () => {
-  alert("Login feature coming soon (Firebase auth)");
+// Feature Access
+document.querySelectorAll(".feature-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const user = auth.currentUser;
+    if (!user) {
+      document.getElementById("paymentPopup").classList.remove("hidden");
+      return;
+    }
+    if (parseInt(sessionCount.textContent) <= 0) {
+      document.getElementById("paymentPopup").classList.remove("hidden");
+      return;
+    }
+    sessionCount.textContent = parseInt(sessionCount.textContent) - 1;
+    alert(`You started ${btn.dataset.feature}. Remaining sessions updated.`);
+  });
 });
-registerBtn.addEventListener("click", () => {
-  alert("Register feature coming soon (Firebase auth)");
+
+// Popup close
+document.getElementById("closePopup").addEventListener("click", () => {
+  document.getElementById("paymentPopup").classList.add("hidden");
 });
-logoutBtn.addEventListener("click", () => {
-  alert("Logout feature coming soon");
+
+// Reviews
+document.getElementById("reviewForm").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const text = document.getElementById("reviewText").value;
+  if (text.trim() === "") return;
+  const reviewDiv = document.createElement("div");
+  reviewDiv.textContent = text;
+  document.getElementById("reviewsList").appendChild(reviewDiv);
+  document.getElementById("reviewText").value = "";
 });
