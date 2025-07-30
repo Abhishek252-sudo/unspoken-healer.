@@ -23,8 +23,9 @@
       position: relative;
     }
     .time-date {
-      font-size: 1rem;
-      color: #1db954;
+      font-size: 1.1rem;
+      color: #ffd700; /* Gold color */
+      font-weight: bold;
     }
     .auth-buttons button {
       background: #1db954;
@@ -115,6 +116,22 @@
       font-size: 0.9rem;
       background: rgba(0,0,0,0.8);
     }
+    /* FAQ */
+    .faq-item {
+      margin: 10px 0;
+      cursor: pointer;
+    }
+    .faq-question {
+      font-weight: bold;
+      color: #ffd700;
+    }
+    .faq-answer {
+      display: none;
+      padding: 5px 10px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 6px;
+      margin-top: 5px;
+    }
     /* Popup */
     .popup {
       position: fixed;
@@ -191,10 +208,34 @@
 
   <section>
     <h2>Why Mental Health Matters</h2>
-    <p>Your mental health is just as important as your physical health. 
-    At Unspoken Healer, we believe that taking care of your mind is the first step toward a happier life. 
-    Whether you’re struggling with stress, anxiety, or just need someone to talk to, 
-    we’re here to support you every step of the way.</p>
+    <p>
+      Imagine carrying a heavy backpack every single day — at first, you may manage, but slowly it wears you down.  
+      Mental struggles are like that backpack, invisible but heavy.  
+      Seeking help doesn’t make you weak — it makes you strong enough to take the weight off.  
+      Remember: healing starts the moment you decide you don’t want to carry it alone.  
+    </p>
+  </section>
+
+  <section>
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFAQ(this)">Is my chat private?</div>
+      <div class="faq-answer">Yes, all conversations are strictly confidential.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFAQ(this)">How do I book a session?</div>
+      <div class="faq-answer">Simply choose a plan and complete payment through UPI or PayPal.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFAQ(this)">What if I need urgent help?</div>
+      <div class="faq-answer">You can request an instant voice session. Wait times are usually under 5 minutes.</div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Contact Us</h2>
+    <p>If you have questions or need support, reach us directly:</p>
+    <p>📧 <a href="mailto:infoabhishekbhandari@gmail.com" style="color:#ffd700;">infoabhishekbhandari@gmail.com</a></p>
   </section>
 
   <section>
@@ -224,9 +265,14 @@
 
     function updateTime() {
       const now = new Date();
-      document.getElementById('timeDate').textContent = now.toLocaleString();
+      let hours = now.getHours();
+      const minutes = now.getMinutes().toString().padStart(2, '0');
+      const ampm = hours >= 12 ? 'PM' : 'AM';
+      hours = hours % 12 || 12;
+      document.getElementById('timeDate').textContent =
+        `${hours}:${minutes} ${ampm} | ${now.toLocaleDateString()}`;
     }
-    setInterval(updateTime, 1000);
+    setInterval(updateTime, 60000);
     updateTime();
 
     function login() { alert("Login feature coming soon (Firebase Auth)."); }
@@ -306,6 +352,11 @@
       }
       document.getElementById('review-msg').textContent = "Thank you for your feedback!";
       document.getElementById('review').value = "";
+    }
+
+    function toggleFAQ(element) {
+      let answer = element.nextElementSibling;
+      answer.style.display = (answer.style.display === "block") ? "none" : "block";
     }
   </script>
 </body>
