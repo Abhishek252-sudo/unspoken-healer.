@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Unspoken Healer 🌌</title>
+  <title>Unspoken Healer 🌿</title>
   <style>
     body {
       margin: 0;
@@ -81,7 +81,8 @@
     }
     footer a { color: #00ccff; text-decoration: none; margin: 0 5px; }
     footer a:hover { text-decoration: underline; }
-    /* Popup styles */
+
+    /* Popup */
     .popup {
       display: none;
       position: fixed;
@@ -106,41 +107,63 @@
       cursor: pointer;
       font-size: 18px;
     }
-    /* Draggable Admin Panel */
-    #adminPanel {
-      width: 250px;
-      background: rgba(0,0,0,0.9);
-      color: white;
-      position: fixed;
-      top: 50px;
-      left: 20px;
-      border-radius: 12px;
-      padding: 15px;
-      z-index: 2000;
-      display: none;
-      cursor: move;
-    }
-    #adminHandle {
-      background: #00cc66;
-      padding: 8px;
-      border-radius: 8px;
+
+    /* Hamburger menu + Drawer */
+    .hamburger {
+      font-size: 24px;
       cursor: pointer;
-      display: inline-block;
-      margin-top: 5px;
+      position: absolute;
+      left: 15px;
+      top: 12px;
+    }
+    #drawer {
+      height: 100%;
+      width: 0;
+      position: fixed;
+      z-index: 2000;
+      top: 0;
+      left: 0;
+      background: rgba(0,0,0,0.95);
+      overflow-x: hidden;
+      transition: 0.3s;
+      padding-top: 60px;
+    }
+    #drawer a {
+      padding: 12px 24px;
+      text-decoration: none;
+      font-size: 18px;
+      color: #00ffcc;
+      display: block;
+    }
+    #drawer a:hover { background: rgba(0,255,200,0.1); }
+    #drawer .closebtn {
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      font-size: 28px;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
   <header>
+    <span class="hamburger" onclick="openDrawer()">☰</span>
     <div class="datetime" id="datetime"></div>
-    <h1>Unspoken Healer 🌌</h1>
+    <h1>Unspoken Healer 🌿</h1>
     <div class="auth-buttons">
       <button id="loginBtn" class="btn" onclick="login()">Login</button>
       <button id="registerBtn" class="btn" onclick="register()">Register</button>
       <button id="logoutBtn" class="btn" onclick="logout()" style="display:none;">Logout</button>
-      <div id="adminHandle" onclick="toggleAdmin()">Admin</div>
     </div>
   </header>
+
+  <!-- Drawer Menu -->
+  <div id="drawer">
+    <span class="closebtn" onclick="closeDrawer()">✖</span>
+    <a href="#" onclick="toggleAdmin()">Admin Dashboard</a>
+    <a href="#">Help & Support</a>
+    <a href="#">Contact Us</a>
+  </div>
 
   <div class="card">
     <h2 style="color:#00ff99;">Remaining Sessions: <span id="sessions">0</span></h2>
@@ -169,13 +192,21 @@
 
   <div class="card">
     <h2 style="color:#00ff99;">Why Mental Health Matters</h2>
-    <p>Your mental health is just as important as your physical health. At Unspoken Healer, we believe that taking care of your mind is the first step toward a happier life. 🌱</p>
+    <p>Your mental health is just as important as your physical health. 🌱</p>
     <p>Whether you’re struggling with stress, anxiety, or loneliness, we’re here to listen and guide you every step of the way.</p>
   </div>
 
   <div class="card">
     <h2 style="color:#00ff99;">About Us</h2>
-    <p>Unspoken Healer was founded with one vision: to ensure no one has to fight their battles alone. Our consultants provide non-judgmental support, whether for mental health struggles, stress relief, or personal growth. Together, we can build resilience and hope. 💡</p>
+    <p>Unspoken Healer was founded with one vision: to ensure no one has to fight their battles alone. 💡</p>
+  </div>
+
+  <div class="card">
+    <h2 style="color:#00ff99;">FAQs</h2>
+    <p><strong>Q: How do I start a session?</strong><br>Login, choose a plan, then tap chat or voice support.</p>
+    <p><strong>Q: Can I cancel anytime?</strong><br>Yes, plans are flexible and you can stop renewal anytime.</p>
+    <p><strong>Q: Do you offer video calls?</strong><br>Video call option is coming soon in updates.</p>
+    <p><strong>Q: Is my data private?</strong><br>Absolutely. We value your privacy and never share personal data.</p>
   </div>
 
   <div class="card">
@@ -186,12 +217,12 @@
 
   <footer>
     © 2025 Unspoken Healer | 
-    <a href="#">Terms of Service</a> | 
+    <a href="https://advikabhi.github.io/unspoken-healer-terms/" target="_blank">Terms of Service</a> | 
     <a href="#">Privacy Policy</a> | 
     <a href="#">Contact Us</a>
   </footer>
 
-  <!-- General Popup -->
+  <!-- Popups & Admin Dashboard remain unchanged -->
   <div class="popup" id="popup">
     <div class="popup-content">
       <span class="close-btn" onclick="closePopup()">✖</span>
@@ -201,34 +232,37 @@
     </div>
   </div>
 
-  <!-- Admin Panel -->
-  <div id="adminPanel">
-    <h2>Admin Dashboard</h2>
-    <p>Here you can view and manage:</p>
-    <ul>
-      <li>👤 Active Users</li>
-      <li>💬 Ongoing Chats</li>
-      <li>📊 Subscription Plans</li>
-      <li>📝 User Feedback</li>
-    </ul>
+  <div class="popup" id="adminPanel">
+    <div class="popup-content">
+      <span class="close-btn" onclick="toggleAdmin()">✖</span>
+      <h2>Admin Dashboard</h2>
+      <ul>
+        <li>👤 Active Users</li>
+        <li>💬 Ongoing Chats</li>
+        <li>📊 Subscription Plans</li>
+        <li>📝 User Feedback</li>
+      </ul>
+    </div>
   </div>
 
   <script>
     let loggedIn = false;
     let hasPlan = false;
 
-    // Date & Time
     function updateDateTime() {
       const now = new Date();
       let hours = now.getHours();
       const minutes = String(now.getMinutes()).padStart(2,'0');
       const ampm = hours >= 12 ? 'PM' : 'AM';
       hours = hours % 12 || 12;
-      document.getElementById('datetime').innerText = now.toDateString() + " " + hours + ":" + minutes + " " + ampm;
+      document.getElementById('datetime').innerText = 
+        now.toDateString() + " " + hours + ":" + minutes + " " + ampm;
     }
     setInterval(updateDateTime, 1000); updateDateTime();
 
-    // Popup
+    function openDrawer() { document.getElementById("drawer").style.width = "250px"; }
+    function closeDrawer() { document.getElementById("drawer").style.width = "0"; }
+
     function showPopup(title, message, actionsHTML) {
       document.getElementById('popupTitle').innerText = title;
       document.getElementById('popupMessage').innerText = message;
@@ -237,40 +271,12 @@
     }
     function closePopup() { document.getElementById('popup').style.display = 'none'; }
 
-    // Admin panel toggle
     function toggleAdmin() {
       const panel = document.getElementById('adminPanel');
       panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
+      closeDrawer();
     }
 
-    // Make admin panel draggable
-    dragElement(document.getElementById("adminPanel"));
-    function dragElement(elmnt) {
-      let pos1=0,pos2=0,pos3=0,pos4=0;
-      elmnt.onmousedown = dragMouseDown;
-      function dragMouseDown(e) {
-        e.preventDefault();
-        pos3 = e.clientX;
-        pos4 = e.clientY;
-        document.onmouseup = closeDragElement;
-        document.onmousemove = elementDrag;
-      }
-      function elementDrag(e) {
-        e.preventDefault();
-        pos1 = pos3 - e.clientX;
-        pos2 = pos4 - e.clientY;
-        pos3 = e.clientX;
-        pos4 = e.clientY;
-        elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
-        elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
-      }
-      function closeDragElement() {
-        document.onmouseup = null;
-        document.onmousemove = null;
-      }
-    }
-
-    // Support logic
     function attemptSupport(type) {
       if(!loggedIn) {
         showPopup("Login Required", "Please log in to continue.", 
@@ -299,7 +305,6 @@
       }
     }
 
-    // Payment
     function choosePayment(amount) {
       showPopup("Choose Payment", "Select your payment method:",
         '<a class="btn" href="upi://pay?pa=paytmqr1j18py8r1j@paytm&pn=UnspokenHealer&am='+amount+'">Pay via UPI</a><br><br>'+
@@ -313,23 +318,14 @@
       alert("Plan activated successfully!");
     }
 
-    // Auth
     function login() {
       loggedIn = true;
       document.getElementById('loginBtn').style.display = 'none';
       document.getElementById('registerBtn').style.display = 'none';
       document.getElementById('logoutBtn').style.display = 'inline-block';
-      alert("Logged in successfully!");
       closePopup();
     }
-    function register() {
-      loggedIn = true;
-      document.getElementById('loginBtn').style.display = 'none';
-      document.getElementById('registerBtn').style.display = 'none';
-      document.getElementById('logoutBtn').style.display = 'inline-block';
-      alert("Registered & logged in successfully!");
-      closePopup();
-    }
+    function register() { login(); }
     function logout() {
       loggedIn = false;
       hasPlan = false;
@@ -337,10 +333,8 @@
       document.getElementById('registerBtn').style.display = 'inline-block';
       document.getElementById('logoutBtn').style.display = 'none';
       document.getElementById('sessions').innerText = "0";
-      alert("Logged out.");
     }
 
-    // Review
     function submitReview() {
       const review = document.getElementById('review').value;
       if(review.trim()) {
