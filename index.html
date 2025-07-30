@@ -13,142 +13,83 @@
       background-size: cover;
     }
     header {
-      background: rgba(0, 0, 0, 0.7);
+      background: rgba(0,0,0,0.7);
       padding: 15px;
       display: flex;
-      justify-content: space-between;
+      justify-content: center;
       align-items: center;
       position: relative;
     }
-    header h1 { 
-      margin: 0; 
-      font-size: 22px; 
-      text-align: center;
-      flex: 1;
-    }
-    .datetime { 
-      font-size: 13px; 
-      color: #00ffcc; 
-      position: absolute; 
-      left: 15px; 
-    }
-    .auth-buttons { 
-      position: absolute; 
-      right: 15px; 
-      display: flex; 
-      gap: 8px; 
+    header h1 { margin: 0; font-size: 24px; }
+    .auth-buttons {
+      position: absolute; right: 15px; display: flex; gap: 8px;
     }
     .btn {
-      background: #00cc66;
-      color: white;
-      padding: 8px 14px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 14px;
+      background: #00cc66; color: white; padding: 8px 14px;
+      border: none; border-radius: 6px; cursor: pointer; font-size: 14px;
     }
     .btn:hover { background: #00994d; }
     .card {
       background: rgba(0,0,0,0.7);
-      margin: 15px auto;
-      padding: 20px;
-      border-radius: 12px;
-      width: 90%;
-      max-width: 800px;
+      margin: 15px auto; padding: 20px; border-radius: 12px;
+      width: 90%; max-width: 800px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.5);
     }
     .chatbox {
-      background: rgba(20,20,20,0.85);
-      padding: 10px;
-      border-radius: 8px;
-      height: 200px;
-      overflow-y: auto;
-      margin-bottom: 10px;
+      background: rgba(20,20,20,0.8);
+      padding: 10px; border-radius: 8px;
+      height: 280px; overflow-y: auto; margin-bottom: 10px;
       font-size: 14px;
     }
     input[type="text"], textarea {
-      width: 100%;
-      padding: 10px;
-      margin: 5px 0;
-      border-radius: 6px;
-      border: none;
+      width: 100%; padding: 10px; margin: 5px 0;
+      border-radius: 6px; border: none;
     }
     footer {
-      background: rgba(0,0,0,0.8);
-      padding: 10px;
-      text-align: center;
-      font-size: 14px;
+      background: rgba(0,0,0,0.85);
+      padding: 10px; text-align: center; font-size: 14px;
     }
     footer a { color: #00ccff; text-decoration: none; margin: 0 5px; }
     footer a:hover { text-decoration: underline; }
 
-    /* Popup */
-    .popup {
-      display: none;
-      position: fixed;
-      z-index: 1000;
-      left: 0; top: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.7);
-    }
-    .popup-content {
-      background: #111;
-      margin: 8% auto;
-      padding: 20px;
-      width: 90%;
-      max-width: 500px;
-      border-radius: 10px;
-      text-align: center;
-      color: white;
-    }
-    .popup h2 { margin-top: 0; }
-    .close-btn {
-      float: right;
-      cursor: pointer;
-      font-size: 18px;
-    }
-
-    /* Hamburger menu + Drawer */
-    .hamburger {
-      font-size: 24px;
-      cursor: pointer;
-      position: absolute;
-      left: 15px;
-      top: 12px;
-    }
+    /* Drawer */
+    .hamburger { font-size: 24px; cursor: pointer; position: absolute; left: 15px; }
     #drawer {
-      height: 100%;
-      width: 0;
-      position: fixed;
-      z-index: 2000;
-      top: 0;
-      left: 0;
-      background: rgba(0,0,0,0.95);
-      overflow-x: hidden;
-      transition: 0.3s;
-      padding-top: 60px;
+      height: 100%; width: 0; position: fixed; z-index: 2000;
+      top: 0; left: 0; background: rgba(0,0,0,0.95);
+      overflow-x: hidden; transition: 0.3s; padding-top: 60px;
     }
     #drawer a {
-      padding: 12px 24px;
-      text-decoration: none;
-      font-size: 18px;
-      color: #00ffcc;
-      display: block;
+      padding: 12px 24px; font-size: 18px; color: #00ffcc;
+      display: block; text-decoration: none;
     }
     #drawer a:hover { background: rgba(0,255,200,0.1); }
     #drawer .closebtn {
-      position: absolute;
-      top: 10px;
-      right: 20px;
-      font-size: 28px;
-      cursor: pointer;
+      position: absolute; top: 10px; right: 20px; font-size: 28px; cursor: pointer;
     }
+
+    /* Popup */
+    .popup {
+      display: none; position: fixed; z-index: 1000;
+      left: 0; top: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.75);
+    }
+    .popup-content {
+      background: #111; margin: 8% auto; padding: 20px;
+      width: 90%; max-width: 500px; border-radius: 10px;
+      text-align: center; color: white;
+    }
+    .close-btn { float: right; cursor: pointer; font-size: 18px; }
+
+    /* Star Rating */
+    .stars { display: flex; justify-content: center; gap: 5px; margin: 10px 0; }
+    .star { font-size: 28px; cursor: pointer; color: gray; }
+    .star.active { color: gold; }
   </style>
 </head>
 <body>
   <header>
     <span class="hamburger" onclick="openDrawer()">☰</span>
-    <div class="datetime" id="datetime"></div>
     <h1>Unspoken Healer 🌿</h1>
     <div class="auth-buttons">
       <button id="loginBtn" class="btn" onclick="login()">Login</button>
@@ -157,7 +98,7 @@
     </div>
   </header>
 
-  <!-- Drawer Menu -->
+  <!-- Drawer -->
   <div id="drawer">
     <span class="closebtn" onclick="closeDrawer()">✖</span>
     <a href="#" onclick="toggleAdmin()">Admin Dashboard</a>
@@ -165,52 +106,68 @@
     <a href="#">Contact Us</a>
   </div>
 
+  <!-- Remaining Sessions -->
   <div class="card">
     <h2 style="color:#00ff99;">Remaining Sessions: <span id="sessions">0</span></h2>
-    <p>Select a support service below. If you don’t have an active plan, you’ll be asked to subscribe.</p>
+    <p>If no active plan, please subscribe to continue.</p>
   </div>
 
+  <!-- Support Options -->
   <div class="card">
     <h2 style="color:#00ff99;">Interactive Support</h2>
     <button class="btn" onclick="attemptSupport('chat')">Chat with Consultant</button>
     <button class="btn" onclick="attemptSupport('voice')">Voice Chat with Consultant</button>
-    <div class="chatbox" id="chatbox">Please choose an option above to begin.</div>
+    <div class="chatbox" id="chatbox">Choose an option above to begin.</div>
     <input type="text" id="usermsg" placeholder="Type your message...">
     <button class="btn" onclick="sendMessage()">Send</button>
     <button class="btn" id="callBtn">Call Consultant (Wait time: 2 mins)</button>
   </div>
 
+  <!-- Plans -->
   <div class="card">
     <h2 style="color:#00ff99;">Our Plans</h2>
     <h3>One-Day Plan</h3>
     <p>₹110 for 1-hour session</p>
     <button class="btn" onclick="choosePayment('110')">Activate Plan</button>
     <h3>Weekly Plan</h3>
-    <p>₹770 for 7 days (+30min bonus each day)</p>
+    <p>₹770 for 7 days (+30min bonus daily)</p>
     <button class="btn" onclick="choosePayment('770')">Activate Plan</button>
   </div>
 
+  <!-- Mental Health Section -->
   <div class="card">
     <h2 style="color:#00ff99;">Why Mental Health Matters</h2>
-    <p>Your mental health is just as important as your physical health. 🌱</p>
+    <p>Your mental health is just as important as your physical health.</p>
+    <p>At <strong>Unspoken Healer</strong>, we believe that taking care of your mind is the first step toward a happier life.</p>
+    <p>Imagine waking up with a lighter heart and a calmer mind. 🌱</p>
     <p>Whether you’re struggling with stress, anxiety, or loneliness, we’re here to listen and guide you every step of the way.</p>
   </div>
 
+  <!-- About Us -->
   <div class="card">
     <h2 style="color:#00ff99;">About Us</h2>
-    <p>Unspoken Healer was founded with one vision: to ensure no one has to fight their battles alone. 💡</p>
+    <p>Unspoken Healer was founded to ensure no one has to fight their battles alone. 💡</p>
   </div>
 
+  <!-- FAQs -->
   <div class="card">
     <h2 style="color:#00ff99;">FAQs</h2>
-    <p><strong>Q: How do I start a session?</strong><br>Login, choose a plan, then tap chat or voice support.</p>
-    <p><strong>Q: Can I cancel anytime?</strong><br>Yes, plans are flexible and you can stop renewal anytime.</p>
-    <p><strong>Q: Do you offer video calls?</strong><br>Video call option is coming soon in updates.</p>
-    <p><strong>Q: Is my data private?</strong><br>Absolutely. We value your privacy and never share personal data.</p>
+    <p><strong>Q:</strong> How do I start a session?<br>Login, choose a plan, then tap chat or voice support.</p>
+    <p><strong>Q:</strong> Can I cancel anytime?<br>Yes, plans are flexible.</p>
+    <p><strong>Q:</strong> Do you offer video calls?<br>Coming soon!</p>
+    <p><strong>Q:</strong> Is my data private?<br>Absolutely. We never share personal data.</p>
   </div>
 
+  <!-- Reviews -->
   <div class="card">
     <h2 style="color:#00ff99;">Share Your Experience</h2>
+    <div class="stars" id="starRating">
+      <span class="star" onclick="setRating(1)">★</span>
+      <span class="star" onclick="setRating(2)">★</span>
+      <span class="star" onclick="setRating(3)">★</span>
+      <span class="star" onclick="setRating(4)">★</span>
+      <span class="star" onclick="setRating(5)">★</span>
+    </div>
     <textarea id="review" placeholder="Write your review..."></textarea>
     <button class="btn" onclick="submitReview()">Submit Review</button>
   </div>
@@ -222,7 +179,7 @@
     <a href="#">Contact Us</a>
   </footer>
 
-  <!-- Popups & Admin Dashboard remain unchanged -->
+  <!-- Popups -->
   <div class="popup" id="popup">
     <div class="popup-content">
       <span class="close-btn" onclick="closePopup()">✖</span>
@@ -232,6 +189,7 @@
     </div>
   </div>
 
+  <!-- Admin Panel -->
   <div class="popup" id="adminPanel">
     <div class="popup-content">
       <span class="close-btn" onclick="toggleAdmin()">✖</span>
@@ -248,17 +206,7 @@
   <script>
     let loggedIn = false;
     let hasPlan = false;
-
-    function updateDateTime() {
-      const now = new Date();
-      let hours = now.getHours();
-      const minutes = String(now.getMinutes()).padStart(2,'0');
-      const ampm = hours >= 12 ? 'PM' : 'AM';
-      hours = hours % 12 || 12;
-      document.getElementById('datetime').innerText = 
-        now.toDateString() + " " + hours + ":" + minutes + " " + ampm;
-    }
-    setInterval(updateDateTime, 1000); updateDateTime();
+    let currentRating = 0;
 
     function openDrawer() { document.getElementById("drawer").style.width = "250px"; }
     function closeDrawer() { document.getElementById("drawer").style.width = "0"; }
@@ -279,12 +227,12 @@
 
     function attemptSupport(type) {
       if(!loggedIn) {
-        showPopup("Login Required", "Please log in to continue.", 
+        showPopup("Login Required", "Please log in to continue.",
           '<button class="btn" onclick="login()">Login</button> <button class="btn" onclick="register()">Register</button>');
       } else if(!hasPlan) {
-        showPopup("No Active Plan", "You need an active plan to start.", 
-          '<button class="btn" onclick="activatePlan(110)">Buy One-Day ₹110</button><br><br>' +
-          '<button class="btn" onclick="activatePlan(770)">Buy Weekly ₹770</button>');
+        showPopup("No Active Plan", "Please activate a plan to continue.",
+          '<button class="btn" onclick="activatePlan(110)">One-Day ₹110</button><br><br>' +
+          '<button class="btn" onclick="activatePlan(770)">Weekly ₹770</button>');
       } else {
         startChat(type);
         closePopup();
@@ -293,7 +241,7 @@
 
     function startChat(type) {
       const box = document.getElementById('chatbox');
-      box.innerHTML = type === 'chat' ? "Started Chat with Consultant ✅" : "Preparing Voice Call... Please wait ⏳";
+      box.innerHTML = type === 'chat' ? "Started Chat with Consultant ✅" : "Preparing Voice Call... Wait ⏳";
     }
 
     function sendMessage() {
@@ -306,11 +254,12 @@
     }
 
     function choosePayment(amount) {
-      showPopup("Choose Payment", "Select your payment method:",
+      showPopup("Choose Payment", "Select method:",
         '<a class="btn" href="upi://pay?pa=paytmqr1j18py8r1j@paytm&pn=UnspokenHealer&am='+amount+'">Pay via UPI</a><br><br>'+
         '<a class="btn" href="https://www.paypal.me/AbhishekBhandari734/'+amount+'" target="_blank">Pay via PayPal</a>'
       );
     }
+
     function activatePlan(amount) {
       hasPlan = true;
       closePopup();
@@ -327,21 +276,26 @@
     }
     function register() { login(); }
     function logout() {
-      loggedIn = false;
-      hasPlan = false;
+      loggedIn = false; hasPlan = false;
       document.getElementById('loginBtn').style.display = 'inline-block';
       document.getElementById('registerBtn').style.display = 'inline-block';
       document.getElementById('logoutBtn').style.display = 'none';
       document.getElementById('sessions').innerText = "0";
     }
 
+    function setRating(rating) {
+      currentRating = rating;
+      const stars = document.querySelectorAll('.star');
+      stars.forEach((star, index) => star.classList.toggle('active', index < rating));
+    }
     function submitReview() {
       const review = document.getElementById('review').value;
-      if(review.trim()) {
-        alert("Thank you for sharing your experience!");
+      if(review.trim() && currentRating > 0) {
+        alert("Thanks for your feedback! ⭐ " + currentRating + "/5");
         document.getElementById('review').value = "";
+        setRating(0);
       } else {
-        alert("Please write something before submitting.");
+        alert("Please provide both rating and review.");
       }
     }
   </script>
