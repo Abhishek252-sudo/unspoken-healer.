@@ -7,93 +7,93 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1650&q=80') no-repeat center center fixed;
-      background-size: cover;
       margin: 0;
       padding: 0;
+      background: url('https://i.ibb.co/7tYR2Hh/ocean-bg.jpg') no-repeat center center fixed;
+      background-size: cover;
       color: white;
     }
-    .overlay {
-      background: rgba(0, 0, 0, 0.6);
-      min-height: 100vh;
-      padding: 20px;
-    }
     header {
+      background: rgba(0,0,0,0.7);
+      padding: 10px 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 10px 20px;
-    }
-    header h1 {
-      margin: 0;
+      color: white;
     }
     .time {
-      color: #00ffcc;
       font-size: 14px;
+      color: #00ff99;
     }
-    button {
+    .buttons button {
+      margin-left: 8px;
       background: #00cc66;
       border: none;
-      padding: 8px 14px;
-      margin: 5px;
-      border-radius: 6px;
       color: white;
+      padding: 6px 12px;
       cursor: pointer;
-    }
-    button:hover {
-      background: #00994d;
+      border-radius: 5px;
     }
     .card {
-      background: rgba(0, 0, 0, 0.7);
+      background: rgba(0,0,0,0.6);
       border-radius: 10px;
+      margin: 20px;
       padding: 20px;
-      margin: 15px 0;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    }
+    .card h2 {
+      color: #00ff99;
+    }
+    .btn {
+      background: #00cc66;
+      border: none;
+      padding: 10px 15px;
+      margin: 5px;
+      border-radius: 6px;
+      cursor: pointer;
+      color: white;
     }
     .chatbox {
-      display: none;
-      flex-direction: column;
-    }
-    .chat-window {
-      background: #111;
+      width: 100%;
       height: 200px;
-      border-radius: 8px;
-      padding: 10px;
+      background: black;
       overflow-y: auto;
-      margin-bottom: 10px;
-    }
-    .chat-input {
-      display: flex;
-    }
-    .chat-input input {
-      flex: 1;
       padding: 10px;
-      border-radius: 6px;
-      border: none;
-      margin-right: 5px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+    }
+    textarea {
+      width: 100%;
+      height: 60px;
+      border-radius: 5px;
+      padding: 10px;
     }
     footer {
+      background: rgba(0,0,0,0.8);
       text-align: center;
-      margin-top: 20px;
-      font-size: 12px;
+      padding: 10px;
+      font-size: 14px;
     }
-    a { color: #00ccff; }
+    footer a {
+      color: #00ccff;
+      margin: 0 5px;
+      text-decoration: none;
+    }
   </style>
 </head>
 <body>
-  <div class="overlay">
-    <header>
-      <div>
-        <span class="time" id="timeDisplay"></span>
-      </div>
-      <h1>Unspoken Healer 🌌</h1>
-      <div>
-        <button onclick="login()">Login</button>
-        <button onclick="register()">Register</button>
-        <button onclick="logout()">Logout</button>
-      </div>
-    </header>
+  <header>
+    <div class="time" id="time"></div>
+    <h1>Unspoken Healer 🌌</h1>
+    <div class="buttons">
+      <button>Login</button>
+      <button>Register</button>
+      <button>Logout</button>
+      <button>Admin</button>
+    </div>
+  </header>
 
+  <main>
     <div class="card">
       <h2>Remaining Sessions: <span id="sessions">0</span></h2>
       <p>Select a support service below. If you don’t have an active plan, you’ll be asked to subscribe.</p>
@@ -101,18 +101,15 @@
 
     <div class="card">
       <h2>Interactive Support</h2>
-      <button onclick="startSupport()">Start</button>
-      <div class="chatbox" id="chatbox">
-        <div class="chat-window" id="chatWindow">Choose an option to begin.</div>
-        <div>
-          <button onclick="startChat()">💬 Chat with Consultant</button>
-          <button onclick="startVoice()">📞 Voice Chat with Consultant</button>
-        </div>
-        <div class="chat-input">
-          <input type="text" id="chatMessage" placeholder="Type your message...">
-          <button onclick="sendMessage()">Send</button>
-        </div>
-        <button id="callBtn" style="display:none;">Call Consultant (Wait time: 2 mins)</button>
+      <div id="supportOptions">
+        <button class="btn" onclick="openChat()">Chat with Consultant</button>
+        <button class="btn" onclick="openVoice()">Voice Chat with Consultant</button>
+      </div>
+      <div id="chatBox" style="display:none;">
+        <div class="chatbox" id="chatMessages">Welcome to Unspoken Healer! 👋</div>
+        <input type="text" id="chatInput" placeholder="Type your message...">
+        <button class="btn" onclick="sendMessage()">Send</button>
+        <button class="btn" id="callBtn">Call Consultant (Wait: 2 mins)</button>
       </div>
     </div>
 
@@ -120,35 +117,38 @@
       <h2>Our Plans</h2>
       <h3>One-Day Plan</h3>
       <p>₹110 for 1-hour session</p>
-      <button onclick="activatePlan('one-day')">Activate Plan</button>
+      <button class="btn" onclick="activatePlan('day')">Activate Plan</button>
 
       <h3>Weekly Plan</h3>
       <p>₹770 for 7 days (+30min bonus each day)</p>
-      <button onclick="activatePlan('weekly')">Activate Plan</button>
+      <button class="btn" onclick="activatePlan('week')">Activate Plan</button>
     </div>
 
     <div class="card">
       <h2>Why Mental Health Matters</h2>
-      <p>Your mental health is just as important as your physical health. At Unspoken Healer, we believe that taking care of your mind is the first step toward a happier life. 
-      Ignoring mental health is like ignoring a wound — it only gets worse. 
-      Whether you’re struggling with stress, anxiety, or just need someone to talk to, we’re here to support you every step of the way.</p>
+      <p>Your mental health is just as important as your physical health. 
+      At Unspoken Healer, we believe that taking care of your mind is the first step toward a happier life. 
+      Imagine waking up with a lighter heart and a calmer mind. 🌱 
+      Whether you’re struggling with stress, anxiety, or loneliness, we’re here to listen and guide you every step of the way.</p>
+    </div>
+
+    <div class="card">
+      <h2>Share Your Experience</h2>
+      <textarea placeholder="Write your review..."></textarea>
+      <button class="btn">Submit Review</button>
     </div>
 
     <div class="card">
       <h2>About Us</h2>
-      <p>Unspoken Healer was founded with one vision: to make emotional and mental support accessible to everyone. 
-      We know that life’s struggles can feel overwhelming, and our mission is to ensure you never have to face them alone. 
-      Whether through chat or voice support, our consultants are here to listen, understand, and guide you without judgment.</p>
+      <p>At Unspoken Healer, our mission is to provide a safe, confidential, and caring space 
+      where people can share their struggles without fear of judgment. 
+      We believe no one should face life’s challenges alone.</p>
     </div>
 
     <div class="card">
       <h2>FAQ</h2>
-      <p><strong>Q:</strong> How do I start a session?<br>
-      <strong>A:</strong> Choose a plan, complete payment, and then tap "Start" under Interactive Support.</p>
-      <p><strong>Q:</strong> Can I use UPI instead of PayPal?<br>
-      <strong>A:</strong> Yes! We support both UPI and PayPal for your convenience.</p>
-      <p><strong>Q:</strong> Will my sessions carry over if unused?<br>
-      <strong>A:</strong> Yes, as long as your plan is active.</p>
+      <p><strong>Q:</strong> How do I book a session?<br><strong>A:</strong> Choose a plan and activate it via UPI or PayPal.</p>
+      <p><strong>Q:</strong> Can I cancel anytime?<br><strong>A:</strong> Yes, you can stop renewing after your current plan ends.</p>
     </div>
 
     <div class="card">
@@ -156,74 +156,57 @@
       <p>Email: support@unspokenhealer.com</p>
       <p>Phone: +91-9876543210</p>
     </div>
+  </main>
 
-    <div class="card">
-      <h2>Share Your Experience</h2>
-      <textarea id="review" rows="4" style="width:100%;" placeholder="Write your review..."></textarea>
-      <button onclick="submitReview()">Submit Review</button>
-    </div>
-
-    <footer>
-      © 2025 Unspoken Healer | <a href="#">Terms of Service</a> | <a href="#">Privacy Policy</a>
-    </footer>
-  </div>
+  <footer>
+    © 2025 Unspoken Healer | 
+    <a href="#">Terms of Service</a> | 
+    <a href="#">Privacy Policy</a>
+  </footer>
 
   <script>
-    // Time updater
     function updateTime() {
       const now = new Date();
-      let hours = now.getHours();
-      const minutes = now.getMinutes().toString().padStart(2,'0');
-      const ampm = hours >= 12 ? 'PM' : 'AM';
-      hours = hours % 12 || 12;
-      document.getElementById("timeDisplay").textContent = 
-        `${now.toLocaleDateString()} ${hours}:${minutes} ${ampm}`;
+      const options = { 
+        weekday: 'short', year: 'numeric', month: 'short', 
+        day: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true 
+      };
+      document.getElementById("time").textContent = now.toLocaleString('en-US', options);
     }
-    setInterval(updateTime, 60000);
+    setInterval(updateTime, 1000);
     updateTime();
 
-    // Session handling
-    let sessions = 0;
-    function activatePlan(plan) {
-      if (plan === 'one-day') sessions += 1;
-      if (plan === 'weekly') sessions += 7;
-      document.getElementById('sessions').textContent = sessions;
-      const method = confirm("Pay with OK=UPI, Cancel=PayPal");
-      if (method) {
-        window.location.href = "upi://pay?pa=paytmqr1j18py8r1j@paytm&pn=UnspokenHealer&am=110&cu=INR";
-      } else {
-        window.location.href = "https://www.paypal.me/AbhishekBhandari734";
+    function openChat() {
+      document.getElementById("chatBox").style.display = "block";
+      document.getElementById("chatMessages").innerHTML += "<p>Started Chat with Consultant ✅</p>";
+    }
+
+    function openVoice() {
+      document.getElementById("chatBox").style.display = "block";
+      document.getElementById("chatMessages").innerHTML += "<p>Preparing Voice Call... Please wait ⏳</p>";
+    }
+
+    function sendMessage() {
+      const msg = document.getElementById("chatInput").value;
+      if (msg.trim() !== "") {
+        document.getElementById("chatMessages").innerHTML += `<p><b>You:</b> ${msg}</p>`;
+        document.getElementById("chatInput").value = "";
       }
     }
 
-    // Interactive Support
-    function startSupport() {
-      document.getElementById("chatbox").style.display = "flex";
+    function activatePlan(plan) {
+      let link;
+      if (plan === 'day') {
+        link = confirm("Choose Payment Method:\nOK = PayPal\nCancel = UPI") 
+          ? "https://www.paypal.me/AbhishekBhandari734"
+          : "upi://pay?pa=paytmqr1j18py8r1j@paytm&pn=UnspokenHealer&am=110&cu=INR";
+      } else {
+        link = confirm("Choose Payment Method:\nOK = PayPal\nCancel = UPI") 
+          ? "https://www.paypal.me/AbhishekBhandari734"
+          : "upi://pay?pa=paytmqr1j18py8r1j@paytm&pn=UnspokenHealer&am=770&cu=INR";
+      }
+      window.location.href = link;
     }
-    function startChat() {
-      document.getElementById("chatWindow").innerHTML += "<p><em>Started Chat with Consultant</em></p>";
-    }
-    function startVoice() {
-      document.getElementById("callBtn").style.display = "block";
-      document.getElementById("chatWindow").innerHTML += "<p><em>Preparing voice session... Please wait.</em></p>";
-    }
-    function sendMessage() {
-      const msg = document.getElementById("chatMessage").value;
-      if (!msg) return;
-      const chatWindow = document.getElementById("chatWindow");
-      chatWindow.innerHTML += "<p><strong>You:</strong> " + msg + "</p>";
-      document.getElementById("chatMessage").value = "";
-      chatWindow.scrollTop = chatWindow.scrollHeight;
-    }
-    function submitReview() {
-      alert("Thank you for your review!");
-      document.getElementById("review").value = "";
-    }
-
-    // Dummy auth
-    function login(){ alert("Login feature coming soon (Firebase auth)."); }
-    function register(){ alert("Register feature coming soon."); }
-    function logout(){ alert("You have logged out."); }
   </script>
 </body>
 </html>
