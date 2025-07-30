@@ -15,17 +15,18 @@
     header {
       background: rgba(0, 0, 0, 0.7);
       padding: 1rem;
-      text-align: center;
-      font-size: 1.8rem;
+      font-size: 1.4rem;
       font-weight: bold;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       position: relative;
     }
-    header span {
-      position: absolute;
-      top: 15px;
-      right: 20px;
+    .time-date {
+      font-size: 1rem;
+      color: #1db954;
     }
-    header button {
+    .auth-buttons button {
       background: #1db954;
       color: white;
       border: none;
@@ -114,22 +115,46 @@
       font-size: 0.9rem;
       background: rgba(0,0,0,0.8);
     }
+    /* Popup */
+    .popup {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.85);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+    }
+    .popup-content {
+      background: #222;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 350px;
+      text-align: center;
+    }
+    .popup-content button {
+      display: block;
+      width: 100%;
+      margin: 10px 0;
+    }
+    .hidden { display: none; }
   </style>
 </head>
 <body>
   <header>
-    Unspoken Healer 🌌
-    <span>
+    <div class="time-date" id="timeDate"></div>
+    <div>Unspoken Healer 🌌</div>
+    <div class="auth-buttons">
       <button onclick="login()">Login</button>
       <button onclick="register()">Register</button>
       <button onclick="logout()">Logout</button>
-    </span>
+    </div>
   </header>
 
   <section>
     <h2>Remaining Sessions: <span id="sessions">0</span></h2>
-    <h3>Choose Your Support</h3>
-    <p>Select a service below. If you don’t have an active plan, you’ll be asked to subscribe.</p>
+    <p>Select a support service below. If you don’t have an active plan, you’ll be asked to subscribe.</p>
   </section>
 
   <section>
@@ -157,11 +182,11 @@
     <h2>Our Plans</h2>
     <h3>One-Day Plan</h3>
     <p>₹110 for 1-hour session</p>
-    <button class="plan-btn" onclick="choosePayment('day')">Activate Plan</button>
+    <button class="plan-btn" onclick="openPaymentPopup('day')">Activate Plan</button>
 
     <h3>Weekly Plan</h3>
     <p>₹770 for 7 days (+30min bonus each day)</p>
-    <button class="plan-btn" onclick="choosePayment('week')">Activate Plan</button>
+    <button class="plan-btn" onclick="openPaymentPopup('week')">Activate Plan</button>
   </section>
 
   <section>
@@ -183,40 +208,56 @@
     <p>© 2025 Unspoken Healer | <a href="#">Terms of Service</a> | <a href="#">Privacy Policy</a></p>
   </footer>
 
+  <!-- Payment Popup -->
+  <div id="paymentPopup" class="popup hidden">
+    <div class="popup-content">
+      <h3>Choose Payment Method</h3>
+      <button onclick="redirectPayment('upi')">Pay with UPI</button>
+      <button onclick="redirectPayment('paypal')">Pay with PayPal</button>
+      <button onclick="closePopup()">Cancel</button>
+    </div>
+  </div>
+
   <script>
     let sessions = 0;
+    let currentPlan = null;
+
+    function updateTime() {
+      const now = new Date();
+      document.getElementById('timeDate').textContent = now.toLocaleString();
+    }
+    setInterval(updateTime, 1000);
+    updateTime();
 
     function login() { alert("Login feature coming soon (Firebase Auth)."); }
     function register() { alert("Register feature coming soon (Firebase Auth)."); }
     function logout() { alert("Logged out!"); }
 
-    function choosePayment(plan) {
-      let method = prompt("Choose Payment Method: type 'upi' or 'paypal'");
-      if (!method) return;
-      redirectPayment(plan, method);
+    function openPaymentPopup(plan) {
+      currentPlan = plan;
+      document.getElementById('paymentPopup').classList.remove('hidden');
+    }
+    function closePopup() {
+      document.getElementById('paymentPopup').classList.add('hidden');
     }
 
-    function redirectPayment(plan, method) {
-      let amount = plan === 'day' ? "110" : "770";
-      if (method.toLowerCase() === "paypal") {
+    function redirectPayment(method) {
+      let amount = currentPlan === 'day' ? "110" : "770";
+      closePopup();
+      if (method === "paypal") {
         window.open("https://www.paypal.me/AbhishekBhandari734/" + amount, "_blank");
       } else {
         window.open("upi://pay?pa=paytmqr1j18py8r1j@paytm&pn=Unspoken%20Healer&am=" + amount + "&cu=INR", "_blank");
       }
-
       setTimeout(() => {
         if (confirm("Have you completed the payment?")) {
-          activatePlan(plan);
+          activatePlan(currentPlan);
         }
       }, 3000);
     }
 
     function activatePlan(plan) {
-      if (plan === 'day') {
-        sessions = 1;
-      } else {
-        sessions = 7;
-      }
+      sessions = (plan === 'day') ? 1 : 7;
       document.getElementById('sessions').textContent = sessions;
       alert("Plan activated successfully!");
     }
