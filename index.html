@@ -52,6 +52,37 @@
       cursor: pointer;
       font-weight: bold;
     }
+    .chatbox {
+      background: rgba(20,20,20,0.9);
+      padding: 1rem;
+      border-radius: 10px;
+    }
+    .chat-messages {
+      height: 200px;
+      overflow-y: auto;
+      background: rgba(0,0,0,0.6);
+      margin-bottom: 0.5rem;
+      padding: 0.6rem;
+      border-radius: 8px;
+    }
+    .chat-input {
+      display: flex;
+      gap: 0.5rem;
+    }
+    .chat-input input {
+      flex: 1;
+      padding: 0.5rem;
+      border-radius: 6px;
+      border: none;
+    }
+    .chat-input button {
+      background: #1db954;
+      border: none;
+      padding: 0.5rem 1rem;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+    }
     .support-options button {
       background: #007bff;
       border: none;
@@ -92,10 +123,26 @@
     <h2>Remaining Sessions: <span id="sessions">0</span></h2>
     <h3>Choose Your Support</h3>
     <p>Select a service below. If you don’t have an active plan, you’ll be asked to subscribe.</p>
-    <div class="support-options">
-      <button onclick="checkPlan('Live Chat with Consultant')">💬 Live Chat with Consultant</button>
-      <button onclick="checkPlan('Second Opinion')">📄 Second Opinion</button>
-      <button onclick="checkPlan('Voice Chat with Consultant')">🎤 Voice Chat with Consultant</button>
+  </section>
+
+  <section>
+    <h2>Interactive Support</h2>
+    <div class="chatbox">
+      <div id="start-screen">
+        <button class="plan-btn" onclick="startChat()">Start</button>
+      </div>
+      <div id="option-screen" style="display:none;">
+        <button onclick="openChat('Chat with Consultant')">💬 Chat with Consultant</button>
+        <button onclick="openChat('Voice Chat with Consultant')">🎤 Voice Chat with Consultant</button>
+      </div>
+      <div id="chat-screen" style="display:none;">
+        <div class="chat-messages" id="chatMessages"></div>
+        <div class="chat-input">
+          <input type="text" id="chatInput" placeholder="Type your message...">
+          <button onclick="sendMessage()">Send</button>
+        </div>
+        <button class="plan-btn" onclick="callConsultant()">📞 Call Consultant (Wait time: <span id="waitTime">2</span> mins)</button>
+      </div>
     </div>
   </section>
 
@@ -103,22 +150,19 @@
     <h2>Our Plans</h2>
     <h3>One-Day Plan</h3>
     <p>₹110 for 1-hour session</p>
-    <button class="plan-btn" onclick="activatePlan('day')">Activate Plan</button>
+    <button class="plan-btn" onclick="redirectPayment('day')">Pay & Activate</button>
 
     <h3>Weekly Plan</h3>
     <p>₹770 for 7 days (+30min bonus each day)</p>
-    <button class="plan-btn" onclick="activatePlan('week')">Activate Plan</button>
+    <button class="plan-btn" onclick="redirectPayment('week')">Pay & Activate</button>
   </section>
 
   <section>
-    <h2>Book a Consultation</h2>
-    <p>Want a human touch? We’re here to listen and guide you.</p>
-    <ul>
-      <li>Select your preferred plan.</li>
-      <li>Complete payment using UPI or PayPal.</li>
-      <li>Click "Activate Plan".</li>
-      <li>You’ll get your session slot automatically added.</li>
-    </ul>
+    <h2>Why Mental Health Matters</h2>
+    <p>Your mental health is just as important as your physical health. 
+    At Unspoken Healer, we believe that taking care of your mind is the first step toward a happier life. 
+    Whether you’re struggling with stress, anxiety, or just need someone to talk to, 
+    we’re here to support you every step of the way.</p>
   </section>
 
   <section>
@@ -129,15 +173,8 @@
   </section>
 
   <section>
-    <h2>About Unspoken Healer</h2>
-    <p>At Unspoken Healer, we believe no one should face struggles alone. 
-    Our consultants provide empathetic, non-judgmental support — whether it’s stress, 
-    relationships, or personal growth.</p>
-  </section>
-
-  <section>
     <h2>FAQ</h2>
-    <p><b>Q:</b> How do I start?<br><b>A:</b> Choose a plan, complete payment, and activate it.</p>
+    <p><b>Q:</b> How do I start?<br><b>A:</b> Tap “Start” and choose a support option.</p>
     <p><b>Q:</b> What payment methods do you support?<br><b>A:</b> UPI and PayPal for now.</p>
     <p><b>Q:</b> Can I upgrade my plan later?<br><b>A:</b> Yes, you can always purchase a new plan.</p>
   </section>
@@ -154,24 +191,26 @@
   <script>
     let sessions = 0;
 
-    function login() {
-      alert("Login feature coming soon (Firebase Auth).");
-    }
-    function register() {
-      alert("Register feature coming soon (Firebase Auth).");
-    }
-    function logout() {
-      alert("Logged out!");
-    }
+    function login() { alert("Login feature coming soon (Firebase Auth)."); }
+    function register() { alert("Register feature coming soon (Firebase Auth)."); }
+    function logout() { alert("Logged out!"); }
 
-    function checkPlan(service) {
-      if (sessions > 0) {
-        sessions--;
-        document.getElementById('sessions').textContent = sessions;
-        alert(`You have started a ${service} session.`);
+    function redirectPayment(plan) {
+      let paymentChoice = confirm("Click OK to pay via PayPal, or Cancel for UPI.");
+      if (paymentChoice) {
+        window.open("https://www.paypal.me/AbhishekBhandari734", "_blank");
       } else {
-        alert("Subscription Required: Please activate a plan first.");
+        window.open("upi://pay?pa=paytmqr1j18py8r1j@paytm&pn=Unspoken%20Healer&mc=0000&tid=1234567890&tr=9876543210&tn=Consultation%20Payment&am=" + (plan === 'day' ? "110" : "770") + "&cu=INR", "_blank");
       }
+
+      setTimeout(() => {
+        let confirmPayment = confirm("Have you completed the payment?");
+        if (confirmPayment) {
+          activatePlan(plan);
+        } else {
+          alert("Please complete the payment to activate the plan.");
+        }
+      }, 3000);
     }
 
     function activatePlan(plan) {
@@ -183,6 +222,34 @@
         alert("Weekly Plan activated! 7 sessions added.");
       }
       document.getElementById('sessions').textContent = sessions;
+    }
+
+    function startChat() {
+      if (sessions > 0) {
+        document.getElementById('start-screen').style.display = "none";
+        document.getElementById('option-screen').style.display = "block";
+      } else {
+        alert("Please activate a plan to start chatting.");
+      }
+    }
+
+    function openChat(option) {
+      document.getElementById('option-screen').style.display = "none";
+      document.getElementById('chat-screen').style.display = "block";
+      document.getElementById('chatMessages').innerHTML += `<p><i>Started ${option}</i></p>`;
+    }
+
+    function sendMessage() {
+      let input = document.getElementById('chatInput');
+      if (input.value.trim() === "") return;
+      document.getElementById('chatMessages').innerHTML += `<p><b>You:</b> ${input.value}</p>`;
+      input.value = "";
+    }
+
+    function callConsultant() {
+      let wait = Math.floor(Math.random() * 5) + 1;
+      document.getElementById('waitTime').textContent = wait;
+      alert(`Connecting you to a consultant. Estimated wait time: ${wait} minutes.`);
     }
 
     function submitReview() {
