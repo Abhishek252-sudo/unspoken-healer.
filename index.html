@@ -1,391 +1,261 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Unspoken Healer 🌱</title>
-    <style>
-        /* Global Reset */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, Helvetica, sans-serif;
-        }
-
-        /* Background with Ocean Theme */
-        body {
-            background: url('https://i.ibb.co/yp1dL7v/ocean-bg.jpg') no-repeat center center fixed;
-            background-size: cover;
-            color: white;
-            line-height: 1.6;
-        }
-
-        /* Header Styling */
-        header {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: rgba(0, 0, 0, 0.6);
-            padding: 12px;
-            position: relative;
-        }
-
-        header img.logo {
-            height: 60px;
-            margin-right: 10px;
-        }
-
-        header h1 {
-            font-size: 1.6rem;
-            color: #fff;
-        }
-
-        /* Login/Register buttons */
-        .auth-buttons {
-            position: absolute;
-            right: 15px;
-            top: 20px;
-        }
-
-        .auth-buttons button {
-            background: green;
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            margin-left: 6px;
-            border-radius: 6px;
-            cursor: pointer;
-        }
-
-        /* Drawer Menu for Admin */
-        .menu-icon {
-            position: absolute;
-            left: 15px;
-            top: 20px;
-            font-size: 28px;
-            cursor: pointer;
-        }
-
-        .drawer {
-            height: 100%;
-            width: 0;
-            position: fixed;
-            top: 0;
-            left: 0;
-            background: rgba(0, 0, 0, 0.95);
-            overflow-x: hidden;
-            transition: 0.4s;
-            padding-top: 60px;
-        }
-
-        .drawer a {
-            padding: 12px 24px;
-            text-decoration: none;
-            color: white;
-            display: block;
-            transition: 0.3s;
-        }
-
-        .drawer a:hover {
-            background: #0f5132;
-        }
-
-        .drawer .close-btn {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            font-size: 30px;
-            cursor: pointer;
-        }
-
-        /* Main Content Containers */
-        .container {
-            max-width: 900px;
-            margin: 20px auto;
-            padding: 20px;
-            background: rgba(0, 0, 0, 0.55);
-            border-radius: 12px;
-        }
-
-        .container h2 {
-            color: #00ff90;
-            margin-bottom: 12px;
-        }
-
-        /* Chatbox Styling */
-        #chatbox {
-            background: rgba(0, 0, 0, 0.8);
-            height: 220px;
-            overflow-y: auto;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 12px;
-        }
-
-        #chatbox p {
-            margin-bottom: 6px;
-        }
-
-        .chat-options {
-            margin-bottom: 12px;
-        }
-
-        .chat-options button {
-            background: green;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            margin-right: 8px;
-            cursor: pointer;
-        }
-
-        .input-group {
-            display: flex;
-        }
-
-        .input-group input {
-            flex: 1;
-            padding: 10px;
-            border: none;
-            border-radius: 6px 0 0 6px;
-        }
-
-        .input-group button {
-            background: green;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 0 6px 6px 0;
-            cursor: pointer;
-        }
-
-        /* Plans Section */
-        .plan {
-            margin-bottom: 20px;
-        }
-
-        .plan button {
-            background: green;
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 6px;
-            cursor: pointer;
-        }
-
-        /* Review Section */
-        .review-box {
-            margin-top: 15px;
-        }
-
-        .stars {
-            margin-bottom: 10px;
-        }
-
-        .stars input {
-            display: none;
-        }
-
-        .stars label {
-            font-size: 22px;
-            color: gray;
-            cursor: pointer;
-        }
-
-        .stars input:checked~label {
-            color: gold;
-        }
-
-        /* Footer */
-        footer {
-            text-align: center;
-            padding: 20px;
-            margin-top: 20px;
-            background: rgba(0, 0, 0, 0.7);
-        }
-
-        footer a {
-            color: #00ff90;
-            text-decoration: none;
-        }
-
-        footer a:hover {
-            text-decoration: underline;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unspoken Healer 🌱</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: url('https://i.ibb.co/0jW3qH0/ocean-bg.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: #fff;
+    }
+    header {
+      background: rgba(0,0,0,0.6);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 20px;
+    }
+    header img {
+      height: 40px;
+    }
+    header h1 {
+      flex: 1;
+      text-align: center;
+      font-size: 22px;
+      margin: 0;
+    }
+    .auth-buttons {
+      display: flex;
+      gap: 10px;
+    }
+    button, .drawer button {
+      background: #00a859;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .drawer {
+      position: fixed;
+      top: 0;
+      left: -250px;
+      width: 250px;
+      height: 100%;
+      background: rgba(0,0,0,0.9);
+      transition: left 0.3s;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    .drawer.open { left: 0; }
+    .menu-btn {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 26px;
+      cursor: pointer;
+    }
+    section {
+      background: rgba(0,0,0,0.6);
+      margin: 20px;
+      padding: 20px;
+      border-radius: 10px;
+    }
+    .chat-box {
+      background: rgba(0,0,0,0.75);
+      height: 200px;
+      overflow-y: auto;
+      padding: 10px;
+      border-radius: 8px;
+    }
+    .chat-input {
+      display: flex;
+      margin-top: 10px;
+    }
+    .chat-input input {
+      flex: 1;
+      padding: 10px;
+      border-radius: 5px;
+      border: none;
+    }
+    .star-rating {
+      display: flex;
+      direction: row-reverse;
+      justify-content: flex-start;
+    }
+    .star-rating input {
+      display: none;
+    }
+    .star-rating label {
+      font-size: 25px;
+      color: #bbb;
+      cursor: pointer;
+    }
+    .star-rating input:checked ~ label,
+    .star-rating label:hover,
+    .star-rating label:hover ~ label {
+      color: gold;
+    }
+    footer {
+      text-align: center;
+      padding: 15px;
+      background: rgba(0,0,0,0.8);
+    }
+    footer a { color: #00aaff; text-decoration: none; }
+    /* Popup */
+    .popup {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.8);
+      justify-content: center;
+      align-items: center;
+    }
+    .popup-content {
+      background: #fff;
+      color: black;
+      padding: 20px;
+      border-radius: 10px;
+      width: 300px;
+      text-align: center;
+    }
+    .popup-content button {
+      margin-top: 10px;
+      width: 100%;
+    }
+  </style>
 </head>
-
 <body>
-    <!-- Drawer Menu -->
-    <span class="menu-icon" onclick="openDrawer()">&#9776;</span>
-    <div id="drawer" class="drawer">
-        <a href="javascript:void(0)" class="close-btn" onclick="closeDrawer()">&times;</a>
-        <a href="#">Admin Dashboard</a>
-        <a href="#">Manage Users</a>
-        <a href="#">View Reports</a>
+  <header>
+    <button class="menu-btn" onclick="toggleDrawer()">☰</button>
+    <img src="https://i.ibb.co/dgXcbrF/unspoken-logo.jpg" alt="Unspoken Healer Logo">
+    <h1>Unspoken Healer</h1>
+    <div class="auth-buttons" id="authButtons">
+      <button onclick="showLogin()">Login</button>
+      <button onclick="showRegister()">Register</button>
     </div>
-
-    <!-- Header -->
-    <header>
-        <img src="logo.png" alt="Unspoken Healer Logo" class="logo">
-        <h1>Unspoken Healer</h1>
-        <div class="auth-buttons">
-            <button onclick="login()">Login</button>
-            <button onclick="register()">Register</button>
-            <button onclick="logout()" id="logoutBtn" style="display:none;">Logout</button>
-        </div>
-    </header>
-
-    <!-- Remaining Sessions -->
-    <div class="container">
-        <h2>Remaining Sessions: <span id="sessions">0</span></h2>
-        <p>Select a support service below. If you don’t have an active plan, you’ll be asked to subscribe.</p>
+    <div class="auth-buttons" id="logoutButton" style="display:none;">
+      <button onclick="logout()">Logout</button>
     </div>
+  </header>
 
-    <!-- Interactive Support -->
-    <div class="container">
-        <h2>Interactive Support</h2>
-        <div class="chat-options">
-            <button onclick="startChat()">Chat with Consultant</button>
-            <button onclick="startVoiceChat()">Voice Chat with Consultant</button>
-        </div>
-        <div id="chatbox">
-            <p>Please choose an option above to begin.</p>
-        </div>
-        <div class="input-group">
-            <input type="text" id="userMessage" placeholder="Type your message...">
-            <button onclick="sendMessage()">Send</button>
-        </div>
-        <button onclick="callConsultant()">Call Consultant (Wait time: 2 mins)</button>
+  <div class="drawer" id="drawer">
+    <h2>Menu</h2>
+    <button onclick="showAdmin()">Admin Dashboard</button>
+  </div>
+
+  <section>
+    <h2>Remaining Sessions: <span id="sessions">0</span></h2>
+    <p>Select a support service below. If you don’t have an active plan, you’ll be asked to subscribe.</p>
+  </section>
+
+  <section>
+    <h2>Interactive Support</h2>
+    <button onclick="startSupport('chat')">Chat with Consultant</button>
+    <button onclick="startSupport('voice')">Voice Chat with Consultant</button>
+    <div class="chat-box" id="chatBox">Please choose an option above to begin.</div>
+    <div class="chat-input">
+      <input type="text" id="chatMessage" placeholder="Type your message...">
+      <button onclick="sendMessage()">Send</button>
     </div>
+  </section>
 
-    <!-- Plans -->
-    <div class="container">
-        <h2>Our Plans</h2>
-        <div class="plan">
-            <p><strong>One-Day Plan</strong><br>₹110 for 1-hour session</p>
-            <button onclick="purchasePlan()">Activate Plan</button>
-        </div>
-        <div class="plan">
-            <p><strong>Weekly Plan</strong><br>₹770 for 7 days (+30min bonus each day)</p>
-            <button onclick="purchasePlan()">Activate Plan</button>
-        </div>
+  <section>
+    <h2>Our Plans</h2>
+    <p><b>One-Day Plan</b><br>₹110 for 1-hour session</p>
+    <button onclick="showPurchase()">Activate Plan</button>
+    <p><b>Weekly Plan</b><br>₹770 for 7 days (+30min bonus each day)</p>
+    <button onclick="showPurchase()">Activate Plan</button>
+  </section>
+
+  <section>
+    <h2>Why Mental Health Matters</h2>
+    <p>Your mental health is just as important as your physical health. At Unspoken Healer, we believe that taking care of your mind is the first step toward a happier life. Imagine waking up with a lighter heart and a calmer mind. 🌱</p>
+    <p>Whether you’re struggling with stress, anxiety, or loneliness, we’re here to listen and guide you every step of the way.</p>
+  </section>
+
+  <section>
+    <h2>About Us</h2>
+    <p>Unspoken Healer was founded with one vision: to ensure no one has to fight their battles alone. Our consultants provide non-judgmental support, whether for mental health struggles, stress relief, or personal growth. Together, we can build resilience and hope. 💡</p>
+  </section>
+
+  <section>
+    <h2>FAQ</h2>
+    <p><b>Q:</b> How do I subscribe?<br><b>A:</b> Simply click on "Activate Plan" and choose UPI or PayPal.</p>
+    <p><b>Q:</b> Can I cancel anytime?<br><b>A:</b> Yes, you can stop renewing anytime.</p>
+  </section>
+
+  <section>
+    <h2>Share Your Experience</h2>
+    <div class="star-rating">
+      <input type="radio" id="5-stars" name="rating" value="5"><label for="5-stars">★</label>
+      <input type="radio" id="4-stars" name="rating" value="4"><label for="4-stars">★</label>
+      <input type="radio" id="3-stars" name="rating" value="3"><label for="3-stars">★</label>
+      <input type="radio" id="2-stars" name="rating" value="2"><label for="2-stars">★</label>
+      <input type="radio" id="1-star" name="rating" value="1"><label for="1-star">★</label>
     </div>
+    <textarea placeholder="Write your review..." rows="4" style="width:100%;"></textarea>
+    <button>Submit Review</button>
+  </section>
 
-    <!-- Why Mental Health Matters -->
-    <div class="container">
-        <h2>Why Mental Health Matters</h2>
-        <p>
-            Your mental health is just as important as your physical health.
-            At Unspoken Healer, we believe that taking care of your mind is
-            the first step toward a happier life. Imagine waking up with a lighter
-            heart and a calmer mind. 🌱
-        </p>
-        <p>
-            Whether you’re struggling with stress, anxiety, or loneliness,
-            we’re here to listen and guide you every step of the way.
-        </p>
+  <footer>
+    © 2025 Unspoken Healer | 
+    <a href="https://unspoken-healer-terms.github.io/terms.html">Terms of Service</a> | 
+    <a href="https://unspoken-healer-terms.github.io/privacy.html">Privacy Policy</a>
+  </footer>
+
+  <!-- Purchase Popup -->
+  <div class="popup" id="purchasePopup">
+    <div class="popup-content">
+      <h3>Purchase Plan</h3>
+      <p>Select your payment method:</p>
+      <button onclick="pay('upi')">Pay with UPI</button>
+      <button onclick="pay('paypal')">Pay with PayPal</button>
+      <button onclick="closePopup()">Cancel</button>
     </div>
+  </div>
 
-    <!-- About Us -->
-    <div class="container">
-        <h2>About Us</h2>
-        <p>
-            Unspoken Healer was founded with one vision: to ensure no one has to fight
-            their battles alone. Our consultants provide non-judgmental support,
-            whether for mental health struggles, stress relief, or personal growth.
-            Together, we can build resilience and hope. 💡
-        </p>
-    </div>
-
-    <!-- FAQ -->
-    <div class="container">
-        <h2>FAQ</h2>
-        <p><strong>Q: Do I need a plan to chat with a consultant?</strong><br>
-            A: Yes, you’ll be prompted to subscribe if you don’t have an active plan.</p>
-        <p><strong>Q: Can I choose between chat and voice support?</strong><br>
-            A: Absolutely! You can select either chat or voice when you start support.</p>
-        <p><strong>Q: Which payment methods are available?</strong><br>
-            A: You can pay via PayPal or UPI.</p>
-    </div>
-
-    <!-- Review Section -->
-    <div class="container">
-        <h2>Share Your Experience</h2>
-        <div class="stars">
-            <input type="radio" id="star5" name="rating" value="5"><label for="star5">★</label>
-            <input type="radio" id="star4" name="rating" value="4"><label for="star4">★</label>
-            <input type="radio" id="star3" name="rating" value="3"><label for="star3">★</label>
-            <input type="radio" id="star2" name="rating" value="2"><label for="star2">★</label>
-            <input type="radio" id="star1" name="rating" value="1"><label for="star1">★</label>
-        </div>
-        <textarea placeholder="Write your review..."></textarea>
-        <button>Submit Review</button>
-    </div>
-
-    <!-- Footer -->
-    <footer>
-        <p>© 2025 Unspoken Healer |
-            <a href="https://unspoken-healer-terms.github.io/terms">Terms of Service</a> |
-            <a href="https://unspoken-healer-terms.github.io/privacy">Privacy Policy</a>
-        </p>
-    </footer>
-
-    <script>
-        function openDrawer() {
-            document.getElementById("drawer").style.width = "250px";
-        }
-
-        function closeDrawer() {
-            document.getElementById("drawer").style.width = "0";
-        }
-
-        function startChat() {
-            document.getElementById("chatbox").innerHTML += "<p>Started Chat with Consultant ✅</p>";
-        }
-
-        function startVoiceChat() {
-            document.getElementById("chatbox").innerHTML += "<p>Preparing Voice Call... Please wait ⏳</p>";
-        }
-
-        function callConsultant() {
-            document.getElementById("chatbox").innerHTML += "<p>Consultant will call shortly 📞</p>";
-        }
-
-        function sendMessage() {
-            let msg = document.getElementById("userMessage").value;
-            if (msg.trim() !== "") {
-                document.getElementById("chatbox").innerHTML += "<p><b>You:</b> " + msg + "</p>";
-                document.getElementById("userMessage").value = "";
-            }
-        }
-
-        function purchasePlan() {
-            let choice = confirm("Choose Payment Method:\nOK = PayPal\nCancel = UPI");
-            if (choice) {
-                window.location.href = "https://www.paypal.me/AbhishekBhandari734";
-            } else {
-                window.location.href = "upi://pay?pa=paytmqr1j18py8r1j@paytm";
-            }
-        }
-
-        function login() {
-            alert("Login form will appear here.");
-            document.getElementById("logoutBtn").style.display = "inline-block";
-        }
-
-        function register() {
-            alert("Register form will appear here.");
-        }
-
-        function logout() {
-            alert("Logged out successfully!");
-            document.getElementById("logoutBtn").style.display = "none";
-        }
-    </script>
+  <script>
+    function toggleDrawer() {
+      document.getElementById('drawer').classList.toggle('open');
+    }
+    function showLogin() { alert("Login form here"); }
+    function showRegister() { alert("Register form here"); }
+    function logout() {
+      document.getElementById('authButtons').style.display = 'flex';
+      document.getElementById('logoutButton').style.display = 'none';
+      alert("Logged out");
+    }
+    function showAdmin() { alert("Admin Dashboard here"); }
+    function startSupport(type) {
+      let sessions = parseInt(document.getElementById('sessions').innerText);
+      if (sessions <= 0) {
+        showPurchase();
+      } else {
+        document.getElementById('chatBox').innerHTML += `<p>Started ${type} session with consultant ✅</p>`;
+      }
+    }
+    function sendMessage() {
+      let msg = document.getElementById('chatMessage').value;
+      if(msg.trim()!=="") {
+        document.getElementById('chatBox').innerHTML += `<p>You: ${msg}</p>`;
+        document.getElementById('chatMessage').value = "";
+      }
+    }
+    function showPurchase() {
+      document.getElementById('purchasePopup').style.display = 'flex';
+    }
+    function closePopup() {
+      document.getElementById('purchasePopup').style.display = 'none';
+    }
+    function pay(method) {
+      alert("Redirecting to " + method + " payment...");
+      closePopup();
+    }
+  </script>
 </body>
-
 </html>
